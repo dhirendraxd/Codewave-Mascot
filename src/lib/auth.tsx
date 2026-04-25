@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   createUserWithEmailAndPassword,
+  getRedirectResult,
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -25,6 +26,7 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, displayName: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  loginAsGuest: () => Promise<void>;
   logout: () => void;
 }
 
@@ -80,16 +82,56 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const googleProvider = useMemo(() => new GoogleAuthProvider(), []);
 
   useEffect(() => {
+    let mounted = true;
+
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (!mounted) return;
       setUser(firebaseUser ? mapFirebaseUser(firebaseUser) : null);
-      setReady(true);
     });
-    return unsubscribe;
+
+    void (async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (!mounted) return;
+        if (result?.user) {
+          setUser(mapFirebaseUser(result.user));
+        }
+      } catch {
+        // Ignore redirect-result errors; onAuthStateChanged will still update auth state.
+      } finally {
+        if (mounted) {
+          setReady(true);
+        }
+      }
+    })();
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
   }, [auth]);
 
   const login = useCallback(async (email: string, password: string) => {
     const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
     setUser(mapFirebaseUser(credential.user));
+  }, [auth]);
+
+  const loginAsGuest = useCallback(async () => {
+    const email = "guest@memorymesh.local";
+    const password = "guest";
+    try {
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(mapFirebaseUser(credential.user));
+    } catch (err) {
+      const code = (err as FirebaseError | undefined)?.code;
+      if (code === "auth/user-not-found") {
+        const credential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(credential.user, { displayName: "Guest" });
+        setUser(mapFirebaseUser(credential.user));
+        return;
+      }
+      throw err;
+    }
   }, [auth]);
 
   const signup = useCallback(async (email: string, password: string, displayName: string) => {
@@ -112,7 +154,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(mapFirebaseUser(credential.user));
     } catch (err) {
       const code = (err as FirebaseError | undefined)?.code;
-      if (code === "auth/popup-blocked" || code === "auth/cancelled-popup-request") {
+      if (
+        code === "auth/popup-blocked" ||
+        code === "auth/cancelled-popup-request" ||
+        code === "auth/popup-closed-by-user"
+      ) {
         await signInWithRedirect(auth, googleProvider);
         return;
       }
@@ -126,8 +172,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [auth]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, ready, login, signup, loginWithGoogle, logout }),
-    [user, ready, login, signup, loginWithGoogle, logout],
+    () => ({ user, ready, login, signup, loginWithGoogle, loginAsGuest, logout }),
+    [user, ready, login, signup, loginWithGoogle, loginAsGuest, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

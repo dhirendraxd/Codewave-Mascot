@@ -34,14 +34,14 @@ function GoogleLogo({ className }: { className?: string }) {
 }
 
 function LoginPage() {
-  const { login, loginWithGoogle, user, ready } = useAuth();
+  const { login, loginWithGoogle, loginAsGuest, user, ready } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    if (ready && user) navigate({ to: "/dashboard" });
+    if (ready && user) navigate({ to: "/dashboard", replace: true });
   }, [ready, user, navigate]);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -73,6 +73,20 @@ function LoginPage() {
     }
   };
 
+  const handleGuestLogin = async () => {
+    if (pending) return;
+    setPending(true);
+    try {
+      await loginAsGuest();
+      toast.success("Continuing as guest.");
+      navigate({ to: "/dashboard", replace: true });
+    } catch (err) {
+      toast.error(readableAuthError(err));
+    } finally {
+      setPending(false);
+    }
+  };
+
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-aurora px-4">
       <div className="pointer-events-none absolute inset-0 opacity-60 [background-image:radial-gradient(circle_at_1px_1px,oklch(1_0_0/0.06)_1px,transparent_0)] [background-size:24px_24px]" />
@@ -89,6 +103,9 @@ function LoginPage() {
           <Button type="button" variant="outline" disabled={pending} className="mt-5 w-full" onClick={handleGoogleLogin}>
             <GoogleLogo className="h-4 w-4" />
             Continue with Google
+          </Button>
+          <Button type="button" variant="secondary" disabled={pending} className="mt-3 w-full" onClick={handleGuestLogin}>
+            Use as guest
           </Button>
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-border/70" />

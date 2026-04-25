@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
+import { Loader2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { ChatView } from "@/components/ChatView";
+
+const ChatView = lazy(() => import("@/components/ChatView").then(module => ({ default: module.ChatView })));
 
 export const Route = createFileRoute("/chat")({
   head: () => ({ meta: [{ title: "Chat — MemoryMesh" }] }),
@@ -10,7 +13,13 @@ export const Route = createFileRoute("/chat")({
 function ChatPage() {
   return (
     <AppShell>
-      <ChatView />
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      }>
+        <ChatView />
+      </Suspense>
     </AppShell>
   );
 }

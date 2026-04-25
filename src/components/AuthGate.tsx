@@ -3,21 +3,17 @@ import { Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
 /**
- * Auth is currently OPEN — no credentials required.
- * If no session exists, we silently sign the visitor in as a guest so every
- * protected page is accessible. The /login and /signup pages still work
- * normally for users who want to create a real account later.
+ * If the user is not authenticated, silently sign them in as a guest so
+ * protected pages remain accessible without requiring real account signup.
  */
 export function AuthGate({ children }: { children: React.ReactNode }) {
-  const { user, ready, login } = useAuth();
+  const { user, ready, loginAsGuest } = useAuth();
 
   useEffect(() => {
     if (ready && !user) {
-      // Auto-provision a guest account. The login() helper auto-creates
-      // an account when the email isn't found, so this works offline.
-      void login("guest@memorymesh.local", "guest");
+      void loginAsGuest();
     }
-  }, [ready, user, login]);
+  }, [ready, user, loginAsGuest]);
 
   if (!ready || !user) {
     return (

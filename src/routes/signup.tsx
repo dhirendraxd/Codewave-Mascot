@@ -42,7 +42,7 @@ function SignupPage() {
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    if (ready && user) navigate({ to: "/dashboard" });
+    if (ready && user) navigate({ to: "/dashboard", replace: true });
   }, [ready, user, navigate]);
 
   const handleSubmit = async (e: FormEvent) => {
