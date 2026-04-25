@@ -81,7 +81,7 @@ function Home() {
       {/* HERO */}
       <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-aurora lg:h-[100svh] lg:min-h-[700px]">
         <div className="absolute inset-0 -z-10 opacity-60 [background-image:radial-gradient(circle_at_1px_1px,oklch(1_0_0/0.06)_1px,transparent_0)] [background-size:24px_24px]" />
-        <div className="mx-auto grid w-full max-w-7xl flex-1 items-center gap-8 px-4 pb-8 pt-24 sm:px-6 sm:pb-10 sm:pt-28 lg:grid-cols-2 lg:gap-8 lg:px-8 lg:pb-6 lg:pt-24">
+        <div className="mx-auto grid w-full flex-1 items-center gap-8 px-4 pb-8 pt-24 sm:px-6 sm:pb-10 sm:pt-28 lg:grid-cols-2 lg:gap-10 lg:px-10 lg:pb-6 lg:pt-24">
           <div>
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
               <Brain className="h-3 w-3 text-primary" />
@@ -92,8 +92,7 @@ function Home() {
               <span className="text-primary">thinking evolves.</span>
             </h1>
             <p className="mt-6 max-w-md text-base text-muted-foreground">
-              MemoryMesh captures your thoughts by voice, connects them across time, and reveals
-              how your ideas reinforce, expand, or contradict — turning scattered notes into self-awareness.
+              Capture thoughts by voice and see how they connect and change over time.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="rounded-full px-7">
@@ -117,7 +116,7 @@ function Home() {
 
         {/* Logo strip */}
         <div className="border-t border-border/60 bg-background/40 backdrop-blur">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-around gap-x-10 gap-y-4 px-4 py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto flex w-full flex-wrap items-center justify-around gap-x-10 gap-y-4 px-4 py-6 sm:px-6 lg:px-10">
             {logos.map((l) => (
               <span key={l} className="text-sm font-semibold tracking-wide text-muted-foreground/70">
                 {l}
@@ -129,7 +128,7 @@ function Home() {
 
       {/* PROBLEM → SOLUTION */}
       <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— The Problem</p>
@@ -163,12 +162,12 @@ function Home() {
 
       {/* PROCESS — How it works */}
       <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Process</p>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">From spoken thought to insight</h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm text-ink-muted">
-              Five stages. One pipeline. Your messy stream of consciousness becomes a connected, queryable map.
+              A clear flow from capture to recall.
             </p>
           </div>
 
@@ -188,7 +187,7 @@ function Home() {
 
       {/* THINKING EVOLUTION ENGINE — Core Innovation */}
       <section className="bg-cream-soft">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Core Innovation</p>
@@ -196,8 +195,7 @@ function Home() {
                 The Thinking <br />Evolution Engine
               </h2>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-ink-muted">
-                MemoryMesh doesn't just link your notes — it watches how your ideas change.
-                Three signals, surfaced across your timeline:
+                Track how ideas change over time through three simple signals:
               </p>
 
               <div className="mt-8 space-y-4">
@@ -278,7 +276,7 @@ function Home() {
 
       {/* THOUSANDS OF BENEFITS — alt showcase */}
       <section className="bg-cream">
-        <div className="mx-auto grid max-w-6xl items-center gap-16 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div className="mx-auto grid w-full items-center gap-16 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-10">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Recall</p>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
@@ -299,11 +297,8 @@ function Home() {
               </li>
             </ul>
             <p className="mt-6 max-w-md text-sm text-ink-muted">
-              Get back structured summaries, the connected notes that informed them, and an evolution insight — not just a list of search results.
+              Get concise answers with linked notes and context.
             </p>
-            <Button asChild className="mt-8 rounded-full px-7">
-              <Link to="/features">Read More</Link>
-            </Button>
           </div>
 
           {/* Mock preview cards */}
@@ -372,7 +367,7 @@ function Home() {
 
       {/* WHY — stats + checkmark grid */}
       <section className="bg-cream-soft">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
               <h2 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
@@ -417,7 +412,7 @@ function Home() {
 
       {/* USE CASES */}
       <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Use Cases</p>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Built for thinkers who change</h2>
@@ -442,13 +437,13 @@ function Home() {
 
       {/* BEST FEATURE — device showcase */}
       <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 py-24 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 py-24 text-center sm:px-6 lg:px-10">
           <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Best Feature</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
             Your second brain, in your pocket
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm text-ink-muted">
-            Tap the mic, talk for ten seconds, and let MemoryMesh handle the summarization, connection, and evolution tracking.
+            Tap the mic, speak naturally, and let MemoryMesh organize the rest.
           </p>
 
           <div className="mt-14 overflow-hidden rounded-2xl border border-ink-soft bg-card p-8 text-left shadow-xl sm:p-12">
@@ -461,14 +456,8 @@ function Home() {
                   Speak it. We'll <span className="italic">connect</span> it.
                 </h3>
                 <p className="mt-4 max-w-md text-sm text-ink-muted">
-                  No formatting, no tagging, no folders. Just talk — MemoryMesh structures the thought and threads it into the rest of your thinking.
+                  No tags or folders needed. Just capture and continue.
                 </p>
-                <div className="mt-6 flex max-w-sm items-center gap-2 rounded-full border border-ink-soft bg-cream-soft p-1.5">
-                  <span className="ml-3 flex-1 truncate text-xs text-ink-muted">Enter your email address</span>
-                  <Button asChild size="sm" className="rounded-full">
-                    <Link to="/capture">Try free</Link>
-                  </Button>
-                </div>
               </div>
               <div className="relative">
                 <div className="mx-auto aspect-[4/5] w-full max-w-[320px] rounded-[2rem] border border-ink-soft bg-background p-4 shadow-2xl">
@@ -497,7 +486,7 @@ function Home() {
 
       {/* PRICING STRIP */}
       <section className="bg-cream-soft">
-        <div className="mx-auto max-w-6xl px-4 py-24 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 py-24 text-center sm:px-6 lg:px-10">
           <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Nepal Pricing</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">तपाईंको growth को लागि perfect plan</h2>
           <p className="mx-auto mt-4 max-w-xl text-sm text-ink-muted">
@@ -564,7 +553,7 @@ function Home() {
 
       {/* TESTIMONIAL BAND */}
       <section className="bg-cream-soft">
-        <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-4 pb-24 sm:px-6 lg:px-10">
           <div className="overflow-hidden rounded-2xl border border-ink-soft bg-background p-10 sm:p-14">
             <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr]">
               <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border border-border bg-card">
@@ -593,9 +582,6 @@ function Home() {
                       <span className="ml-1 text-[11px] text-ink-muted">4.9</span>
                     </div>
                   </div>
-                  <Button asChild size="icon" className="h-10 w-10 rounded-full">
-                    <Link to="/signup"><ArrowRight className="h-4 w-4" /></Link>
-                  </Button>
                 </div>
               </div>
             </div>

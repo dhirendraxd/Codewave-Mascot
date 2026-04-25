@@ -1,6 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Mic, Sparkles, Network, MessageSquare } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { MarketingShell } from "@/components/marketing/MarketingShell";
 
 export const Route = createFileRoute("/how-it-works")({
@@ -26,20 +25,20 @@ function HowPage() {
   return (
     <MarketingShell>
       <section className="bg-aurora">
-        <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
+        <div className="mx-auto w-full px-4 py-20 text-center sm:px-6 lg:px-10 lg:py-28">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Workflow
           </span>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
-            From <span className="text-primary">raw thought</span> to retrievable memory
+            From <span className="text-primary">raw thought</span> to memory
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-            Four quiet steps. No tags to manage, no folders to maintain.
+            Four simple steps. No manual organizing.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full px-4 py-20 sm:px-6 lg:px-10">
         <div className="relative space-y-12">
           <div className="absolute left-[27px] top-2 bottom-2 hidden w-px bg-border md:block" />
           {steps.map(({ n, icon: Icon, title, body }) => (
@@ -54,12 +53,6 @@ function HowPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-16 flex justify-center">
-          <Button asChild size="lg" className="rounded-full px-7">
-            <Link to="/signup">Start capturing</Link>
-          </Button>
         </div>
       </section>
     </MarketingShell>

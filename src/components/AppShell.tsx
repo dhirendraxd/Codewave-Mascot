@@ -150,7 +150,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       if (!verified) throw new Error("Timezone boundary verification failed.");
       setExportBounds(`${formatBound(start, exportTimeZone)} → ${formatBound(end, exportTimeZone)} · UTC ${formatUtcBound(start)}–${formatUtcBound(end)}`);
       setExportBoundsCopy(formatCopyBounds(start, end, exportTimeZone));
-      const notes = (await getNotesForDateRange(start, end)).filter((n) => !n.userId || n.userId === user?.id);
+      if (!user?.id) {
+        toast.error("Sign in required", {
+          description: "Please sign in to export your memories.",
+        });
+        return;
+      }
+      const notes = await getNotesForDateRange(start, end, user.id);
       setExportProgress(60);
       if (notes.length === 0) {
         toast.message(`No memories for ${formatDateLabel(exportDate)}.`);

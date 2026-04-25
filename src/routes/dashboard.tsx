@@ -70,10 +70,13 @@ function DashboardContent() {
     setError(null);
     (async () => {
       try {
-        const all = await getAllNotes();
+        if (!user?.id) {
+          setNotes([]);
+          return;
+        }
+        const all = await getAllNotes(user.id);
         if (cancelled) return;
-        const mine = all.filter((n) => !n.userId || n.userId === user?.id);
-        setNotes(mine);
+        setNotes(all);
       } catch (err) {
         if (cancelled) return;
         setError(err instanceof Error ? err.message : "Failed to load notes");

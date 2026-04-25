@@ -19,7 +19,7 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="absolute inset-x-0 top-0 z-40 bg-transparent">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-10">
           <Link to="/" className="flex items-center gap-2">
             <span className="relative flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-card shadow-[var(--shadow-ember)]">
               <span className="h-1.5 w-1.5 rounded-full bg-background" />
@@ -67,7 +67,7 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
         </div>
         {open && (
           <div className="border-t border-border/40 bg-background md:hidden">
-            <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6">
+            <div className="mx-auto flex w-full flex-col gap-1 px-4 py-3 sm:px-6 lg:px-10">
               {navLinks.map((l) => (
                 <Link
                   key={l.to}
@@ -97,7 +97,7 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
       <main>{children}</main>
 
       <footer className="border-t border-border/40 bg-background">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
+        <div className="mx-auto grid w-full gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_var(--ember-glow)]" />
@@ -125,7 +125,7 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="border-t border-border/40">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
+          <div className="mx-auto flex w-full flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-10">
             <p>© {new Date().getFullYear()} MemoryMesh. All thoughts welcome.</p>
             <p>Built with care · Voice-first · AI-powered recall</p>
           </div>

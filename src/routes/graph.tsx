@@ -169,9 +169,13 @@ function GraphContent() {
     setLoading(true);
     (async () => {
       try {
-        const all = await getAllNotes();
+        if (!user?.id) {
+          setNotes([]);
+          return;
+        }
+        const all = await getAllNotes(user.id);
         if (cancelled) return;
-        setNotes(all.filter((n) => !n.userId || n.userId === user?.id));
+        setNotes(all);
       } catch (err) {
         if (cancelled) return;
         notifyError("firestore-read", err, () => setReloadKey((k) => k + 1));

@@ -3,6 +3,8 @@ import {
   collection,
   getDocs,
   orderBy,
+  Query,
+  QueryConstraint,
   query,
   serverTimestamp,
   Timestamp,
@@ -25,6 +27,17 @@ export interface Note {
 }
 
 const COLLECTION = "notes";
+
+function notesQueryForUser(userId?: string, ...constraints: QueryConstraint[]): Query {
+  if (!userId) {
+    throw new Error("Authentication required to access notes.");
+  }
+  return query(
+    collection(getDb(), COLLECTION),
+    where("userId", "==", userId),
+    ...constraints,
+  );
+}
 
 export async function saveNote(input: {
   originalTranscript: string;
@@ -60,31 +73,27 @@ function mapDoc(id: string, data: Record<string, unknown>): Note {
   };
 }
 
-export async function getAllNotes(): Promise<Note[]> {
-  const q = query(collection(getDb(), COLLECTION), orderBy("createdAt", "desc"));
+export async function getAllNotes(userId?: string): Promise<Note[]> {
+  const q = notesQueryForUser(userId, orderBy("createdAt", "desc"));
   const snap = await getDocs(q);
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-export async function getNotesLast24h(): Promise<Note[]> {
+export async function getNotesLast24h(userId?: string): Promise<Note[]> {
   const since = Timestamp.fromDate(new Date(Date.now() - 24 * 60 * 60 * 1000));
-  const q = query(
-    collection(getDb(), COLLECTION),
-    where("createdAt", ">=", since),
-    orderBy("createdAt", "asc"),
-  );
+  const q = notesQueryForUser(userId, where("createdAt", ">=", since), orderBy("createdAt", "asc"));
   const snap = await getDocs(q);
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-export async function getNotesForDate(date: Date): Promise<Note[]> {
+export async function getNotesForDate(date: Date, userId?: string): Promise<Note[]> {
   const start = new Date(date);
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
   end.setDate(end.getDate() + 1);
 
-  const q = query(
-    collection(getDb(), COLLECTION),
+  const q = notesQueryForUser(
+    userId,
     where("createdAt", ">=", Timestamp.fromDate(start)),
     where("createdAt", "<", Timestamp.fromDate(end)),
     orderBy("createdAt", "asc"),
@@ -93,9 +102,9 @@ export async function getNotesForDate(date: Date): Promise<Note[]> {
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-export async function getNotesForDateRange(start: Date, end: Date): Promise<Note[]> {
-  const q = query(
-    collection(getDb(), COLLECTION),
+export async function getNotesForDateRange(start: Date, end: Date, userId?: string): Promise<Note[]> {
+  const q = notesQueryForUser(
+    userId,
     where("createdAt", ">=", Timestamp.fromDate(start)),
     where("createdAt", "<", Timestamp.fromDate(end)),
     orderBy("createdAt", "asc"),

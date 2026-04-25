@@ -88,16 +88,16 @@ export function OrbitHero() {
         />
       ))}
 
-      {/* Center mic */}
+      {/* Center illustration mic (minimal line style) */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
-          <span className="absolute inset-0 -m-3 animate-ping rounded-full bg-primary/20" />
-          <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary shadow-[var(--shadow-ember)] ring-1 ring-border">
-            <Mic className="h-7 w-7 text-background" />
+          <span className="absolute inset-0 -m-3 animate-ping rounded-full bg-primary/15" />
+          <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-border/70 bg-card/70">
+            <Mic className="h-14 w-14 text-primary" strokeWidth={1.75} />
           </div>
-          <div className="mt-3 text-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-            Listening
-          </div>
+          <p className="mt-2 text-center text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            Speak freely
+          </p>
         </div>
       </div>
 

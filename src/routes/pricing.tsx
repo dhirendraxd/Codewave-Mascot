@@ -21,8 +21,7 @@ const plans = [
     name: "Free",
     price: "रु 0",
     cadence: "/ सधैं",
-    desc: "Start small, dream big.",
-    cta: "Free मा सुरु गर्नुहोस्",
+    desc: "For personal use.",
     features: ["प्रति महिना 100 voice memories", "AI cleanup + smart buckets", "Connection graph", "Daily Markdown export"],
     highlight: false,
   },
@@ -30,8 +29,7 @@ const plans = [
     name: "Pro",
     price: "रु 1,199",
     cadence: "/ महिना",
-    desc: "Level up your second brain.",
-    cta: "Pro मा जानुहोस्",
+    desc: "For regular creators.",
     features: ["Unlimited memories", "Long-form transcripts", "Priority AI processing", "Place + time recall", "Email support"],
     highlight: true,
   },
@@ -39,8 +37,7 @@ const plans = [
     name: "Team",
     price: "रु 3,199",
     cadence: "/ seat / महिना",
-    desc: "Think together, move faster.",
-    cta: "Team plan लिनुहोस्",
+    desc: "For small teams.",
     features: ["Everything in Pro", "Shared buckets", "Team graph view", "Admin controls", "SSO (coming soon)"],
     highlight: false,
   },
@@ -50,20 +47,20 @@ function PricingPage() {
   return (
     <MarketingShell>
       <section className="bg-aurora">
-        <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
+        <div className="mx-auto w-full px-4 py-20 text-center sm:px-6 lg:px-10 lg:py-28">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Nepal Pricing
           </span>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
-            Nepal का लागि <span className="text-primary">smart pricing</span>
+            Simple <span className="text-primary">pricing</span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-            Free बाट सुरु गर्नुहोस्, growth आएपछि मात्र upgrade गर्नुहोस्.
+            Pick a plan that fits your usage.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full px-4 py-16 sm:px-6 lg:px-10">
         <div className="grid gap-6 lg:grid-cols-3">
           {plans.map((p) => (
             <div
@@ -86,17 +83,6 @@ function PricingPage() {
                 <span className="text-5xl font-semibold tracking-tight">{p.price}</span>
                 <span className="text-sm text-muted-foreground">{p.cadence}</span>
               </div>
-              <Button
-                asChild
-                className={cn(
-                  "mt-6 w-full rounded-full",
-                  p.highlight
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "bg-card text-foreground hover:bg-card/80",
-                )}
-              >
-                <Link to="/signup">{p.cta}</Link>
-              </Button>
               <ul className="mt-8 space-y-3">
                 {p.features.map((f) => (
                   <li key={f} className="flex items-start gap-3 text-sm text-muted-foreground">
@@ -107,6 +93,11 @@ function PricingPage() {
               </ul>
             </div>
           ))}
+        </div>
+        <div className="mt-10 text-center">
+          <Button asChild className="rounded-full px-6">
+            <Link to="/signup">Create account</Link>
+          </Button>
         </div>
       </section>
     </MarketingShell>

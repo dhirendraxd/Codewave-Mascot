@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { chatWithGemini } from "@/lib/gemini";
 import { getAllNotes } from "@/lib/notes";
 import { friendlyError, notifyError } from "@/lib/errors";
+import { useAuth } from "@/lib/auth";
 
 interface Message {
   id: string;
@@ -13,6 +14,7 @@ interface Message {
 }
 
 export function ChatView() {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
@@ -26,7 +28,18 @@ export function ChatView() {
     setPending(true);
     let stage: "firestore-read" | "gemini" = "firestore-read";
     try {
-      const notes = await getAllNotes();
+      if (!user?.id) {
+        setMessages((m) => [
+          ...m,
+          {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: "Please sign in to chat with your memories.",
+          },
+        ]);
+        return;
+      }
+      const notes = await getAllNotes(user.id);
       stage = "gemini";
       const reply = await chatWithGemini(
         question,

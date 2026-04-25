@@ -1,6 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Mic, Brain, Boxes, Network, MapPin, MessageSquare, Sparkles, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { MarketingShell } from "@/components/marketing/MarketingShell";
 
 export const Route = createFileRoute("/features")({
@@ -30,20 +29,20 @@ function FeaturesPage() {
   return (
     <MarketingShell>
       <section className="bg-aurora">
-        <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-28">
+        <div className="mx-auto w-full px-4 py-20 text-center sm:px-6 lg:px-10 lg:py-28">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Features
           </span>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-            Everything you need to <span className="text-primary">never forget a thought</span>
+            Core features for <span className="text-primary">clear thinking</span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-            A focused toolkit that turns scattered voice notes into a searchable, connected second brain.
+            Capture, connect, and recall thoughts without extra setup.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full px-4 py-16 sm:px-6 lg:px-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {features.map(({ icon: Icon, title, desc }) => (
             <div key={title} className="group rounded-2xl border border-border/50 bg-card/40 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card/70">
@@ -54,11 +53,6 @@ function FeaturesPage() {
               <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{desc}</p>
             </div>
           ))}
-        </div>
-        <div className="mt-14 flex justify-center">
-          <Button asChild size="lg" className="rounded-full px-7">
-            <Link to="/signup">Try it free</Link>
-          </Button>
         </div>
       </section>
     </MarketingShell>
