@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowRight, Check, Quote, Star, Mic, MessageSquare, Boxes, Network,
+  ArrowRight, Check, Mic, MessageSquare, Boxes, Network,
   Sparkles, Brain, TrendingUp, GitBranch, AlertCircle, Search, MapPin, Download,
   Mic2, Lightbulb, GraduationCap, Rocket, Sprout,
 } from "lucide-react";
@@ -81,12 +81,9 @@ function Home() {
       {/* HERO */}
       <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-aurora lg:h-[100svh] lg:min-h-[700px]">
         <div className="absolute inset-0 -z-10 opacity-60 [background-image:radial-gradient(circle_at_1px_1px,oklch(1_0_0/0.06)_1px,transparent_0)] [background-size:24px_24px]" />
-        <div className="mx-auto grid w-full flex-1 items-center gap-8 px-4 pb-8 pt-24 sm:px-6 sm:pb-10 sm:pt-28 lg:grid-cols-2 lg:gap-10 lg:px-10 lg:pb-6 lg:pt-24">
+        <div className="mx-auto grid w-full max-w-[1440px] flex-1 items-center gap-8 px-4 pb-8 pt-24 sm:px-6 sm:pb-10 sm:pt-28 lg:grid-cols-2 lg:gap-10 lg:px-10 lg:pb-6 lg:pt-24">
           <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
-              <Brain className="h-3 w-3 text-primary" />
-              Voice-first · Thinking Evolution Engine
-            </div>
+
             <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px] xl:text-[64px]">
               A living map of how your{" "}
               <span className="text-primary">thinking evolves.</span>
@@ -116,7 +113,7 @@ function Home() {
 
         {/* Logo strip */}
         <div className="border-t border-border/60 bg-background/40 backdrop-blur">
-          <div className="mx-auto flex w-full flex-wrap items-center justify-around gap-x-10 gap-y-4 px-4 py-6 sm:px-6 lg:px-10">
+          <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-around gap-x-10 gap-y-4 px-4 py-6 sm:px-6 lg:px-10">
             {logos.map((l) => (
               <span key={l} className="text-sm font-semibold tracking-wide text-muted-foreground/70">
                 {l}
@@ -126,43 +123,11 @@ function Home() {
         </div>
       </section>
 
-      {/* PROBLEM → SOLUTION */}
-      <section className="bg-cream">
-        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— The Problem</p>
-              <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-                You don't just lose ideas. <br />You lose the growth of your thinking.
-              </h2>
-              <ul className="mt-8 space-y-4 text-sm leading-relaxed text-ink-muted">
-                <li className="flex gap-3"><span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />Most ideas are never captured in the first place.</li>
-                <li className="flex gap-3"><span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />Captured ideas sit in isolation — no thread between them.</li>
-                <li className="flex gap-3"><span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />There's no visibility into how your thinking actually changes over time.</li>
-              </ul>
-              <p className="mt-6 max-w-md text-sm text-ink-muted">
-                Tools like Notion AI and Obsidian focus on storage and organization — not the evolution of thought.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— The Solution</p>
-              <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-                A system that helps you <span className="italic">understand</span> how your ideas change.
-              </h2>
-              <ul className="mt-8 space-y-4 text-sm leading-relaxed text-ink-muted">
-                <li className="flex gap-3"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />Capture instantly via voice (or text) — zero friction.</li>
-                <li className="flex gap-3"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />Auto-structure and tag thoughts with semantic understanding.</li>
-                <li className="flex gap-3"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />Connect related ideas across days, weeks, and months.</li>
-                <li className="flex gap-3"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />Detect shifts, contradictions, and patterns in your own mind.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* PROCESS — How it works */}
       <section className="bg-cream">
-        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-24 sm:px-6 lg:px-10">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Process</p>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">From spoken thought to insight</h2>
@@ -187,7 +152,7 @@ function Home() {
 
       {/* THINKING EVOLUTION ENGINE — Core Innovation */}
       <section className="bg-cream-soft">
-        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-24 sm:px-6 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Core Innovation</p>
@@ -276,7 +241,7 @@ function Home() {
 
       {/* THOUSANDS OF BENEFITS — alt showcase */}
       <section className="bg-cream">
-        <div className="mx-auto grid w-full items-center gap-16 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-10">
+        <div className="mx-auto grid w-full max-w-[1440px] items-center gap-16 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-10">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Recall</p>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
@@ -365,54 +330,9 @@ function Home() {
         </div>
       </section>
 
-      {/* WHY — stats + checkmark grid */}
-      <section className="bg-cream-soft">
-        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <div>
-              <h2 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-                Not another <br />note-taking app.
-              </h2>
-              <p className="mt-4 max-w-md text-sm text-ink-muted">
-                MemoryMesh stores ideas the way other tools do — but the difference is what happens next: connection, comparison, and a clear view of how you're changing.
-              </p>
-            </div>
-            <div className="grid grid-cols-3 gap-4 self-end">
-              {[
-                { v: "5", l: "Pipeline stages" },
-                { v: "3", l: "Evolution signals" },
-                { v: "0", l: "Manual tagging" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <div className="text-3xl font-semibold text-ink sm:text-4xl">{s.v}</div>
-                  <div className="mt-1 text-[11px] uppercase tracking-wider text-ink-muted">{s.l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-16 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {productFeatures.map(({ icon: Icon, title, body }) => (
-              <div key={title} className="flex gap-4">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-ink">
-                  <Check className="h-4 w-4 text-ink" strokeWidth={3} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 text-ink" />
-                    <h3 className="text-base font-semibold text-ink">{title}</h3>
-                  </div>
-                  <p className="mt-1 text-sm leading-relaxed text-ink-muted">{body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* USE CASES */}
       <section className="bg-cream">
-        <div className="mx-auto w-full px-4 py-24 sm:px-6 lg:px-10">
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-24 sm:px-6 lg:px-10">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Use Cases</p>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Built for thinkers who change</h2>
@@ -437,7 +357,7 @@ function Home() {
 
       {/* BEST FEATURE — device showcase */}
       <section className="bg-cream">
-        <div className="mx-auto w-full px-4 py-24 text-center sm:px-6 lg:px-10">
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-24 text-center sm:px-6 lg:px-10">
           <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Best Feature</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
             Your second brain, in your pocket
@@ -484,110 +404,6 @@ function Home() {
         </div>
       </section>
 
-      {/* PRICING STRIP */}
-      <section className="bg-cream-soft">
-        <div className="mx-auto w-full px-4 py-24 text-center sm:px-6 lg:px-10">
-          <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Nepal Pricing</p>
-          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">तपाईंको growth को लागि perfect plan</h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-ink-muted">
-            Free बाट सुरु गर्नुहोस्, momentum आएपछि Pro मा जाऔं.
-          </p>
-
-          <div className="mt-14 grid gap-6 text-left lg:grid-cols-3">
-            {[
-              {
-                name: "Basic", price: "रु 0", cadence: "/ सधैं", desc: "Kickstart your second brain",
-                features: ["प्रति महिना 100 memories", "AI cleanup", "Manual buckets", "Markdown export"],
-                highlight: false,
-              },
-              {
-                name: "Standard", price: "रु 1,199", cadence: "/ महिना", desc: "Most loved by creators",
-                features: ["Unlimited memories", "Auto buckets", "Connection graph", "Place + time recall", "Priority AI"],
-                highlight: true,
-              },
-              {
-                name: "Premium", price: "रु 3,199", cadence: "/ seat / महिना", desc: "Built for fast-moving teams",
-                features: ["Shared buckets", "Team graph", "Admin controls", "SSO (soon)"],
-                highlight: false,
-              },
-            ].map((p) => (
-              <div
-                key={p.name}
-                className={
-                  p.highlight
-                    ? "rounded-2xl border border-primary/40 bg-primary/10 p-8 text-foreground shadow-2xl"
-                    : "rounded-2xl border border-ink-soft bg-background p-8 text-foreground"
-                }
-              >
-                <div className={p.highlight ? "text-xs uppercase tracking-wider opacity-70" : "text-xs uppercase tracking-wider text-ink-muted"}>
-                  {p.name}
-                </div>
-                <div className="mt-3 flex items-baseline gap-1">
-                  <span className="text-4xl font-semibold">{p.price}</span>
-                  <span className={p.highlight ? "text-xs opacity-70" : "text-xs text-ink-muted"}>{p.cadence}</span>
-                </div>
-                <div className={p.highlight ? "mt-1 text-xs opacity-70" : "mt-1 text-xs text-ink-muted"}>{p.desc}</div>
-                <ul className="mt-6 space-y-3 text-sm">
-                  {p.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  asChild
-                  className={
-                    p.highlight
-                      ? "mt-8 w-full rounded-full"
-                      : "mt-8 w-full rounded-full"
-                  }
-                >
-                  <Link to="/signup">Open Account</Link>
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIAL BAND */}
-      <section className="bg-cream-soft">
-        <div className="mx-auto w-full px-4 pb-24 sm:px-6 lg:px-10">
-          <div className="overflow-hidden rounded-2xl border border-ink-soft bg-background p-10 sm:p-14">
-            <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr]">
-              <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border border-border bg-card">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary shadow-[var(--shadow-ember)]">
-                    <Quote className="h-10 w-10 text-primary-foreground" />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Testimonials</p>
-                <h3 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-                  What our users say
-                </h3>
-                <p className="mt-5 max-w-lg text-base leading-relaxed text-ink-muted">
-                  "I knew my thinking on hiring had shifted, but MemoryMesh actually showed me when and why. That's something no other tool has ever done for me."
-                </p>
-                <div className="mt-6 flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-semibold text-ink">Devon K.</div>
-                    <div className="text-xs text-ink-muted">Founder, Indie Studio</div>
-                    <div className="mt-1 flex items-center gap-0.5 text-primary">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                      ))}
-                      <span className="ml-1 text-[11px] text-ink-muted">4.9</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </MarketingShell>
   );
 }
