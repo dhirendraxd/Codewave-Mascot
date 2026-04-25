@@ -498,26 +498,26 @@ function Home() {
       {/* PRICING STRIP */}
       <section className="bg-cream-soft">
         <div className="mx-auto max-w-6xl px-4 py-24 text-center sm:px-6 lg:px-8">
-          <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Pricing</p>
-          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Choose your plan</h2>
+          <p className="text-xs uppercase tracking-[0.3em] text-ink-muted">— Nepal Pricing</p>
+          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">तपाईंको growth को लागि perfect plan</h2>
           <p className="mx-auto mt-4 max-w-xl text-sm text-ink-muted">
-            Start free. Upgrade only when your second brain outgrows the basics.
+            Free बाट सुरु गर्नुहोस्, momentum आएपछि Pro मा जाऔं.
           </p>
 
           <div className="mt-14 grid gap-6 text-left lg:grid-cols-3">
             {[
               {
-                name: "Basic", price: "$0", cadence: "/month", desc: "Free account",
-                features: ["100 memories / mo", "AI cleanup", "Manual buckets", "Markdown export"],
+                name: "Basic", price: "रु 0", cadence: "/ सधैं", desc: "Kickstart your second brain",
+                features: ["प्रति महिना 100 memories", "AI cleanup", "Manual buckets", "Markdown export"],
                 highlight: false,
               },
               {
-                name: "Standard", price: "$9", cadence: "/month", desc: "All free + features",
+                name: "Standard", price: "रु 1,199", cadence: "/ महिना", desc: "Most loved by creators",
                 features: ["Unlimited memories", "Auto buckets", "Connection graph", "Place + time recall", "Priority AI"],
                 highlight: true,
               },
               {
-                name: "Premium", price: "$24", cadence: "/seat / mo", desc: "All Pro features",
+                name: "Premium", price: "रु 3,199", cadence: "/ seat / महिना", desc: "Built for fast-moving teams",
                 features: ["Shared buckets", "Team graph", "Admin controls", "SSO (soon)"],
                 highlight: false,
               },

@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — MemoryMesh" },
-      { name: "description", content: "Simple plans for personal recall and team-wide memory. Start free, upgrade when you outgrow it." },
-      { property: "og:title", content: "Pricing — MemoryMesh" },
-      { property: "og:description", content: "Simple plans for personal recall and team-wide memory. Start free, upgrade when you outgrow it." },
+      { title: "Pricing Nepal — MemoryMesh" },
+      { name: "description", content: "नेपाली users को लागि सरल NPR plans। Free बाट सुरु गर्नुहोस्, growth सँगै upgrade गर्नुहोस्।" },
+      { property: "og:title", content: "Pricing Nepal — MemoryMesh" },
+      { property: "og:description", content: "नेपाली users को लागि सरल NPR plans। Free बाट सुरु गर्नुहोस्, growth सँगै upgrade गर्नुहोस्।" },
     ],
   }),
   component: PricingPage,
@@ -19,28 +19,28 @@ export const Route = createFileRoute("/pricing")({
 const plans = [
   {
     name: "Free",
-    price: "$0",
-    cadence: "forever",
-    desc: "For curious thinkers getting started.",
-    cta: "Get started",
-    features: ["100 voice memories / mo", "AI cleanup & buckets", "Connection graph", "Daily Markdown export"],
+    price: "रु 0",
+    cadence: "/ सधैं",
+    desc: "Start small, dream big.",
+    cta: "Free मा सुरु गर्नुहोस्",
+    features: ["प्रति महिना 100 voice memories", "AI cleanup + smart buckets", "Connection graph", "Daily Markdown export"],
     highlight: false,
   },
   {
     name: "Pro",
-    price: "$9",
-    cadence: "/ month",
-    desc: "For knowledge workers and creators.",
-    cta: "Go Pro",
+    price: "रु 1,199",
+    cadence: "/ महिना",
+    desc: "Level up your second brain.",
+    cta: "Pro मा जानुहोस्",
     features: ["Unlimited memories", "Long-form transcripts", "Priority AI processing", "Place + time recall", "Email support"],
     highlight: true,
   },
   {
     name: "Team",
-    price: "$24",
-    cadence: "/ seat / mo",
-    desc: "Shared memory for small teams.",
-    cta: "Talk to us",
+    price: "रु 3,199",
+    cadence: "/ seat / महिना",
+    desc: "Think together, move faster.",
+    cta: "Team plan लिनुहोस्",
     features: ["Everything in Pro", "Shared buckets", "Team graph view", "Admin controls", "SSO (coming soon)"],
     highlight: false,
   },
@@ -52,13 +52,13 @@ function PricingPage() {
       <section className="bg-aurora">
         <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Pricing
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Nepal Pricing
           </span>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
-            Memory that scales <span className="text-primary">with you</span>
+            Nepal का लागि <span className="text-primary">smart pricing</span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-            Start free. Upgrade only when you actually need more.
+            Free बाट सुरु गर्नुहोस्, growth आएपछि मात्र upgrade गर्नुहोस्.
           </p>
         </div>
       </section>
@@ -77,7 +77,7 @@ function PricingPage() {
             >
               {p.highlight && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-primary-foreground">
-                  Most popular
+                  सबैभन्दा लोकप्रिय
                 </span>
               )}
               <h3 className="text-lg font-semibold text-foreground">{p.name}</h3>
