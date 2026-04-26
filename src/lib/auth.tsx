@@ -58,7 +58,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setUser(readSession());
+    let session = readSession();
+    if (!session) {
+      // Auto-create guest account if no session exists
+      const guestUser: AuthUser = {
+        id: crypto.randomUUID(),
+        email: "guest@memorymesh.local",
+        displayName: "Guest",
+        createdAt: new Date().toISOString(),
+      };
+      writeSession(guestUser);
+
+      // Also add to accounts for consistency
+      const accounts = readAccounts();
+      const guestAccount: StoredAccount = {
+        ...guestUser,
+        password: "guest",
+      };
+      if (!accounts.some((a) => a.email === guestUser.email)) {
+        writeAccounts([...accounts, guestAccount]);
+      }
+
+      session = guestUser;
+    }
+    setUser(session);
     setReady(true);
   }, []);
 
