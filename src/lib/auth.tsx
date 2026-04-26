@@ -18,6 +18,7 @@ export interface AuthUser {
   email: string;
   displayName: string;
   createdAt: string;
+  isGuest?: boolean;
 }
 
 interface AuthContextValue {
@@ -84,9 +85,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
+    // Check for stored guest user first
+    const storedGuest = localStorage.getItem("memorymesh_guest_user");
+    if (storedGuest) {
+      try {
+        const guestUser = JSON.parse(storedGuest) as AuthUser;
+        if (guestUser.isGuest) {
+          setUser(guestUser);
+          setReady(true);
+          return;
+        }
+      } catch {
+        localStorage.removeItem("memorymesh_guest_user");
+      }
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (!mounted) return;
-      setUser(firebaseUser ? mapFirebaseUser(firebaseUser) : null);
+      if (firebaseUser) {
+        const mappedUser = mapFirebaseUser(firebaseUser);
+        setUser(mappedUser);
+        // If we had a guest user, sync their data
+        const storedGuest = localStorage.getItem("memorymesh_guest_user");
+        if (storedGuest) {
+          try {
+            const guestUser = JSON.parse(storedGuest) as AuthUser;
+            if (guestUser.isGuest) {
+              // Trigger data sync
+              void (async () => {
+                try {
+                  const { syncGuestDataToFirebase } = await import("./local-notes");
+                  await syncGuestDataToFirebase(guestUser.id, mappedUser.id);
+                  // Show success message
+                  console.log("Guest data synced successfully!");
+                } catch (error) {
+                  console.error("Failed to sync guest data:", error);
+                }
+              })();
+            }
+          } catch {
+            // ignore
+          }
+          localStorage.removeItem("memorymesh_guest_user");
+        }
+      } else {
+        setUser(null);
+      }
     });
 
     void (async () => {
@@ -117,22 +161,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [auth]);
 
   const loginAsGuest = useCallback(async () => {
-    const email = "guest@memorymesh.local";
-    const password = "guest";
-    try {
-      const credential = await signInWithEmailAndPassword(auth, email, password);
-      setUser(mapFirebaseUser(credential.user));
-    } catch (err) {
-      const code = (err as FirebaseError | undefined)?.code;
-      if (code === "auth/user-not-found") {
-        const credential = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(credential.user, { displayName: "Guest" });
-        setUser(mapFirebaseUser(credential.user));
-        return;
-      }
-      throw err;
-    }
-  }, [auth]);
+    // Create a local guest user without Firebase
+    const guestId = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const guestUser: AuthUser = {
+      id: guestId,
+      email: "",
+      displayName: "Guest",
+      createdAt: new Date().toISOString(),
+      isGuest: true,
+    };
+    setUser(guestUser);
+    // Store guest user in localStorage for persistence
+    localStorage.setItem("memorymesh_guest_user", JSON.stringify(guestUser));
+  }, []);
 
   const signup = useCallback(async (email: string, password: string, displayName: string) => {
     const credential = await createUserWithEmailAndPassword(auth, email.trim(), password);
@@ -167,9 +208,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [auth, googleProvider]);
 
   const logout = useCallback(() => {
-    void signOut(auth);
-    setUser(null);
-  }, [auth]);
+    if (user?.isGuest) {
+      // For guest users, just clear local state
+      setUser(null);
+      localStorage.removeItem("memorymesh_guest_user");
+    } else {
+      // For Firebase users, sign out
+      void signOut(auth);
+      setUser(null);
+    }
+  }, [auth, user?.isGuest]);
 
   const value = useMemo<AuthContextValue>(
     () => ({ user, ready, login, signup, loginWithGoogle, loginAsGuest, logout }),

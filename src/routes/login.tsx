@@ -36,13 +36,29 @@ function GoogleLogo({ className }: { className?: string }) {
 function LoginPage() {
   const { login, loginWithGoogle, loginAsGuest, user, ready } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [pending, setPending] = useState(false);
+  const [guestLoginPending, setGuestLoginPending] = useState(false);
 
   useEffect(() => {
-    if (ready && user) navigate({ to: "/dashboard", replace: true });
-  }, [ready, user, navigate]);
+    if (ready && user && guestLoginPending) {
+      setGuestLoginPending(false);
+      navigate({ to: "/dashboard", replace: true });
+    }
+  }, [ready, user, guestLoginPending, navigate]);
+
+  const handleGuestLogin = async () => {
+    if (pending) return;
+    setPending(true);
+    setGuestLoginPending(true);
+    try {
+      await loginAsGuest();
+      toast.success("Continuing as guest.");
+    } catch (err) {
+      toast.error(readableAuthError(err));
+      setGuestLoginPending(false);
+    } finally {
+      setPending(false);
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -66,20 +82,6 @@ function LoginPage() {
       await loginWithGoogle();
       toast.success("Signed in with Google.");
       navigate({ to: "/dashboard" });
-    } catch (err) {
-      toast.error(readableAuthError(err));
-    } finally {
-      setPending(false);
-    }
-  };
-
-  const handleGuestLogin = async () => {
-    if (pending) return;
-    setPending(true);
-    try {
-      await loginAsGuest();
-      toast.success("Continuing as guest.");
-      navigate({ to: "/dashboard", replace: true });
     } catch (err) {
       toast.error(readableAuthError(err));
     } finally {
