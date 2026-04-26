@@ -13,23 +13,14 @@ export function groupByBucket(notes: Note[]): BucketGroup[] {
     map.get(key)!.push(n);
   }
   return Array.from(map.entries())
-    .map(([name, ns]) => ({
-      name,
-      notes: ns.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
-    }))
+    .map(([name, ns]) => ({ name, notes: ns.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) }))
     .sort((a, b) => b.notes.length - a.notes.length);
 }
 
-export function bucketColor(name: string): {
-  bg: string;
-  border: string;
-  text: string;
-  dot: string;
-} {
+export function bucketColor(name: string): { bg: string; border: string; text: string; dot: string } {
   return {
     bg: "color-mix(in oklab, var(--color-card) 88%, var(--color-primary) 12%)",
-    border:
-      "color-mix(in oklab, var(--color-border) 75%, var(--color-primary) 25%)",
+    border: "color-mix(in oklab, var(--color-border) 75%, var(--color-primary) 25%)",
     text: "var(--color-foreground)",
     dot: "var(--color-primary)",
   };

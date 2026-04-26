@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { chatWithGemini } from "@/lib/gemini";
 import { getAllNotes } from "@/lib/notes";
 import { friendlyError, notifyError } from "@/lib/errors";
-import { useAuth } from "@/lib/auth";
 
 interface Message {
   id: string;
@@ -14,35 +13,20 @@ interface Message {
 }
 
 export function ChatView() {
-  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({
-      top: scrollRef.current.scrollHeight,
-      behavior: "smooth",
-    });
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, pending]);
 
   const askQuestion = async (question: string) => {
     setPending(true);
     let stage: "firestore-read" | "gemini" = "firestore-read";
     try {
-      if (!user?.id) {
-        setMessages((m) => [
-          ...m,
-          {
-            id: crypto.randomUUID(),
-            role: "assistant",
-            content: "Please sign in to chat with your memories.",
-          },
-        ]);
-        return;
-      }
-      const notes = await getAllNotes(user.id);
+      const notes = await getAllNotes();
       stage = "gemini";
       const reply = await chatWithGemini(
         question,
@@ -54,10 +38,7 @@ export function ChatView() {
           place: n.place ?? n.city ?? null,
         })),
       );
-      setMessages((m) => [
-        ...m,
-        { id: crypto.randomUUID(), role: "assistant", content: reply },
-      ]);
+      setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", content: reply }]);
     } catch (err) {
       const { title, description } = friendlyError(stage, err);
       notifyError(stage, err, () => {
@@ -79,11 +60,7 @@ export function ChatView() {
   const handleSend = async () => {
     const question = input.trim();
     if (!question || pending) return;
-    const userMsg: Message = {
-      id: crypto.randomUUID(),
-      role: "user",
-      content: question,
-    };
+    const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: question };
     setMessages((m) => [...m, userMsg]);
     setInput("");
     await askQuestion(question);

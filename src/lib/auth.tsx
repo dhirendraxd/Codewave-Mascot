@@ -1,262 +1,121 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
-import {
-  createUserWithEmailAndPassword,
-  getRedirectResult,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signInWithRedirect,
-  signOut,
-  updateProfile,
-} from "firebase/auth";
-import type { FirebaseError } from "firebase/app";
-import { getFirebaseAuth } from "@/lib/firebase";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 export interface AuthUser {
   id: string;
   email: string;
   displayName: string;
   createdAt: string;
-  isGuest?: boolean;
+}
+
+interface StoredAccount extends AuthUser {
+  password: string;
 }
 
 interface AuthContextValue {
   user: AuthUser | null;
   ready: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (
-    email: string,
-    password: string,
-    displayName: string,
-  ) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
-  loginAsGuest: () => Promise<void>;
+  signup: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => void;
 }
 
+const ACCOUNTS_KEY = "memorymesh:accounts";
+const SESSION_KEY = "memorymesh:session";
+
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function readableAuthError(err: unknown): string {
-  const code = (err as FirebaseError | undefined)?.code;
-  switch (code) {
-    case "auth/unauthorized-domain":
-      return "This domain is not authorized in Firebase. Add it in Authentication > Settings > Authorized domains.";
-    case "auth/popup-blocked":
-      return "Popup was blocked by the browser. Allow popups and try again.";
-    case "auth/popup-closed-by-user":
-      return "Google sign-in popup was closed before completion.";
-    case "auth/network-request-failed":
-      return "Network error while contacting Firebase. Please check your connection.";
-    case "auth/invalid-credential":
-      return "Invalid credentials. Please try again.";
-    case "auth/invalid-email":
-      return "Please enter a valid email address.";
-    case "auth/user-not-found":
-    case "auth/wrong-password":
-      return "Incorrect email or password.";
-    case "auth/email-already-in-use":
-      return "This email is already in use.";
-    case "auth/weak-password":
-      return "Password is too weak.";
-    default:
-      return err instanceof Error ? err.message : "Authentication failed.";
+function readAccounts(): StoredAccount[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(ACCOUNTS_KEY);
+    return raw ? (JSON.parse(raw) as StoredAccount[]) : [];
+  } catch {
+    return [];
   }
 }
 
-function mapFirebaseUser(user: {
-  uid: string;
-  email: string | null;
-  displayName: string | null;
-  metadata: { creationTime?: string };
-}): AuthUser {
-  const fallbackEmail = user.email ?? "";
-  const fallbackName = fallbackEmail.split("@")[0] || "User";
-  return {
-    id: user.uid,
-    email: fallbackEmail,
-    displayName: user.displayName || fallbackName,
-    createdAt: user.metadata.creationTime || new Date().toISOString(),
-  };
+function writeAccounts(accounts: StoredAccount[]): void {
+  window.localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+}
+
+function readSession(): AuthUser | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(SESSION_KEY);
+    return raw ? (JSON.parse(raw) as AuthUser) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeSession(user: AuthUser | null): void {
+  if (user) window.localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+  else window.localStorage.removeItem(SESSION_KEY);
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [ready, setReady] = useState(false);
-  const auth = getFirebaseAuth();
-  const googleProvider = useMemo(() => new GoogleAuthProvider(), []);
 
   useEffect(() => {
-    let mounted = true;
-
-    // Check for stored guest user first
-    const storedGuest = localStorage.getItem("memorymesh_guest_user");
-    if (storedGuest) {
-      try {
-        const guestUser = JSON.parse(storedGuest) as AuthUser;
-        if (guestUser.isGuest) {
-          setUser(guestUser);
-          setReady(true);
-          return;
-        }
-      } catch {
-        localStorage.removeItem("memorymesh_guest_user");
-      }
-    }
-
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (!mounted) return;
-      if (firebaseUser) {
-        const mappedUser = mapFirebaseUser(firebaseUser);
-        setUser(mappedUser);
-        // If we had a guest user, sync their data
-        const storedGuest = localStorage.getItem("memorymesh_guest_user");
-        if (storedGuest) {
-          try {
-            const guestUser = JSON.parse(storedGuest) as AuthUser;
-            if (guestUser.isGuest) {
-              // Trigger data sync
-              void (async () => {
-                try {
-                  const { syncGuestDataToFirebase } =
-                    await import("./local-notes");
-                  await syncGuestDataToFirebase(guestUser.id, mappedUser.id);
-                  // Show success message
-                  console.log("Guest data synced successfully!");
-                } catch (error) {
-                  console.error("Failed to sync guest data:", error);
-                }
-              })();
-            }
-          } catch {
-            // ignore
-          }
-          localStorage.removeItem("memorymesh_guest_user");
-        }
-      } else {
-        setUser(null);
-      }
-    });
-
-    void (async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (!mounted) return;
-        if (result?.user) {
-          setUser(mapFirebaseUser(result.user));
-        }
-      } catch {
-        // Ignore redirect-result errors; onAuthStateChanged will still update auth state.
-      } finally {
-        if (mounted) {
-          setReady(true);
-        }
-      }
-    })();
-
-    return () => {
-      mounted = false;
-      unsubscribe();
-    };
-  }, [auth]);
-
-  const login = useCallback(
-    async (email: string, password: string) => {
-      const credential = await signInWithEmailAndPassword(
-        auth,
-        email.trim(),
-        password,
-      );
-      setUser(mapFirebaseUser(credential.user));
-    },
-    [auth],
-  );
-
-  const loginAsGuest = useCallback(async () => {
-    // Create a local guest user without Firebase
-    const guestId = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const guestUser: AuthUser = {
-      id: guestId,
-      email: "",
-      displayName: "Guest",
-      createdAt: new Date().toISOString(),
-      isGuest: true,
-    };
-    setUser(guestUser);
-    // Store guest user in localStorage for persistence
-    localStorage.setItem("memorymesh_guest_user", JSON.stringify(guestUser));
+    setUser(readSession());
+    setReady(true);
   }, []);
 
-  const signup = useCallback(
-    async (email: string, password: string, displayName: string) => {
-      const credential = await createUserWithEmailAndPassword(
-        auth,
-        email.trim(),
+  const login = useCallback(async (email: string, password: string) => {
+    const accounts = readAccounts();
+    const normalized = email.trim().toLowerCase();
+    const found = accounts.find((a) => a.email === normalized);
+    if (!found) {
+      // Static demo: auto-create account if none exists for the email
+      const newAccount: StoredAccount = {
+        id: crypto.randomUUID(),
+        email: normalized,
+        displayName: normalized.split("@")[0] || "User",
         password,
-      );
-      const cleanName = displayName.trim();
-      if (cleanName) {
-        await updateProfile(credential.user, { displayName: cleanName });
-      }
-      setUser(
-        mapFirebaseUser({
-          ...credential.user,
-          displayName: cleanName || credential.user.displayName,
-        }),
-      );
-    },
-    [auth],
-  );
-
-  const loginWithGoogle = useCallback(async () => {
-    try {
-      const credential = await signInWithPopup(auth, googleProvider);
-      setUser(mapFirebaseUser(credential.user));
-    } catch (err) {
-      const code = (err as FirebaseError | undefined)?.code;
-      if (
-        code === "auth/popup-blocked" ||
-        code === "auth/cancelled-popup-request" ||
-        code === "auth/popup-closed-by-user"
-      ) {
-        await signInWithRedirect(auth, googleProvider);
-        return;
-      }
-      throw err;
+        createdAt: new Date().toISOString(),
+      };
+      writeAccounts([...accounts, newAccount]);
+      const { password: _pw, ...session } = newAccount;
+      writeSession(session);
+      setUser(session);
+      return;
     }
-  }, [auth, googleProvider]);
+    if (found.password !== password) {
+      throw new Error("Incorrect password.");
+    }
+    const { password: _pw, ...session } = found;
+    writeSession(session);
+    setUser(session);
+  }, []);
+
+  const signup = useCallback(async (email: string, password: string, displayName: string) => {
+    const accounts = readAccounts();
+    const normalized = email.trim().toLowerCase();
+    if (accounts.some((a) => a.email === normalized)) {
+      throw new Error("An account with this email already exists.");
+    }
+    const newAccount: StoredAccount = {
+      id: crypto.randomUUID(),
+      email: normalized,
+      displayName: displayName.trim() || normalized.split("@")[0] || "User",
+      password,
+      createdAt: new Date().toISOString(),
+    };
+    writeAccounts([...accounts, newAccount]);
+    const { password: _pw, ...session } = newAccount;
+    writeSession(session);
+    setUser(session);
+  }, []);
 
   const logout = useCallback(() => {
-    if (user?.isGuest) {
-      // For guest users, just clear local state
-      setUser(null);
-      localStorage.removeItem("memorymesh_guest_user");
-    } else {
-      // For Firebase users, sign out
-      void signOut(auth);
-      setUser(null);
-    }
-  }, [auth, user?.isGuest]);
+    writeSession(null);
+    setUser(null);
+  }, []);
 
   const value = useMemo<AuthContextValue>(
-    () => ({
-      user,
-      ready,
-      login,
-      signup,
-      loginWithGoogle,
-      loginAsGuest,
-      logout,
-    }),
-    [user, ready, login, signup, loginWithGoogle, loginAsGuest, logout],
+    () => ({ user, ready, login, signup, logout }),
+    [user, ready, login, signup, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

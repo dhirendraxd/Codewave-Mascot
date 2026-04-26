@@ -1,13 +1,4 @@
-import {
-  Mic,
-  MapPin,
-  MessageSquare,
-  Sparkles,
-  Boxes,
-  Hash,
-  Calendar,
-  Brain,
-} from "lucide-react";
+import { Mic, MapPin, MessageSquare, Sparkles, Boxes, Hash, Calendar, Brain } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 /**
@@ -28,13 +19,7 @@ interface Ring {
   items: OrbitItem[];
 }
 
-function IconBubble({
-  icon: Icon,
-  color,
-}: {
-  icon: LucideIcon;
-  color: string;
-}) {
+function IconBubble({ icon: Icon, color }: { icon: LucideIcon; color: string }) {
   return (
     <div
       className="flex h-10 w-10 items-center justify-center rounded-full ring-1 backdrop-blur-md"
@@ -103,16 +88,16 @@ export function OrbitHero() {
         />
       ))}
 
-      {/* Center illustration mic (minimal line style) */}
+      {/* Center mic */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
-          <span className="absolute inset-0 -m-3 animate-ping rounded-full bg-primary/15" />
-          <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-border/70 bg-card/70">
-            <Mic className="h-14 w-14 text-primary" strokeWidth={1.75} />
+          <span className="absolute inset-0 -m-3 animate-ping rounded-full bg-primary/20" />
+          <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary shadow-[var(--shadow-ember)] ring-1 ring-border">
+            <Mic className="h-7 w-7 text-background" />
           </div>
-          <p className="mt-2 text-center text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            Speak freely
-          </p>
+          <div className="mt-3 text-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+            Listening
+          </div>
         </div>
       </div>
 
@@ -131,21 +116,13 @@ export function OrbitHero() {
               <div
                 key={j}
                 className="absolute left-1/2 top-1/2"
-                style={{
-                  transform: `translate(${x}px, ${y}px) translate(-50%, -50%)`,
-                }}
+                style={{ transform: `translate(${x}px, ${y}px) translate(-50%, -50%)` }}
               >
                 <div
                   className={`${r.spinClass} animate-float`}
-                  style={{
-                    animationDirection: "reverse",
-                    animationDelay: `${j * 0.3}s`,
-                  }}
+                  style={{ animationDirection: "reverse", animationDelay: `${j * 0.3}s` }}
                 >
-                  <IconBubble
-                    icon={item.icon}
-                    color={item.color ?? "var(--color-primary)"}
-                  />
+                  <IconBubble icon={item.icon} color={item.color ?? "var(--color-primary)"} />
                 </div>
               </div>
             );

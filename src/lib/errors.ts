@@ -1,11 +1,7 @@
 // Friendly error messages + toast helpers for Gemini & Firestore failures.
 import { toast } from "sonner";
 
-export type ErrorKind =
-  | "gemini"
-  | "firestore-read"
-  | "firestore-write"
-  | "unknown";
+export type ErrorKind = "gemini" | "firestore-read" | "firestore-write" | "unknown";
 
 function rawMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
@@ -21,10 +17,7 @@ function isOffline(): boolean {
  * Translate a raw error into a short, human-friendly message based on what
  * the user was trying to do. Falls back to a generic message if unknown.
  */
-export function friendlyError(
-  kind: ErrorKind,
-  err: unknown,
-): { title: string; description: string } {
+export function friendlyError(kind: ErrorKind, err: unknown): { title: string; description: string } {
   const raw = rawMessage(err);
   const lower = raw.toLowerCase();
 
@@ -36,32 +29,19 @@ export function friendlyError(
   }
 
   if (kind === "gemini") {
-    if (
-      lower.includes("api key") ||
-      lower.includes("api_key") ||
-      raw.includes("403")
-    ) {
+    if (lower.includes("api key") || lower.includes("api_key") || raw.includes("403")) {
       return {
         title: "AI service is not configured",
-        description:
-          "The Gemini API key is missing or invalid. Please add it in src/lib/gemini.ts.",
+        description: "The Gemini API key is missing or invalid. Please add it in src/lib/gemini.ts.",
       };
     }
-    if (
-      raw.includes("429") ||
-      lower.includes("quota") ||
-      lower.includes("rate")
-    ) {
+    if (raw.includes("429") || lower.includes("quota") || lower.includes("rate")) {
       return {
         title: "AI is rate-limited",
         description: "Too many requests right now. Wait a moment and retry.",
       };
     }
-    if (
-      raw.includes("500") ||
-      raw.includes("503") ||
-      lower.includes("unavailable")
-    ) {
+    if (raw.includes("500") || raw.includes("503") || lower.includes("unavailable")) {
       return {
         title: "AI service is unavailable",
         description: "Gemini is temporarily down. Please try again shortly.",
@@ -108,8 +88,7 @@ export function friendlyError(
     if (lower.includes("unavailable") || lower.includes("network")) {
       return {
         title: "Couldn't save — connection issue",
-        description:
-          "We'll keep your transcript ready. Tap retry when you're back online.",
+        description: "We'll keep your transcript ready. Tap retry when you're back online.",
       };
     }
     return {

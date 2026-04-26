@@ -3,8 +3,6 @@ import {
   collection,
   getDocs,
   orderBy,
-  Query,
-  QueryConstraint,
   query,
   serverTimestamp,
   Timestamp,
@@ -28,18 +26,13 @@ export interface Note {
 
 const COLLECTION = "notes";
 
-function notesQueryForUser(
-  userId?: string,
-  ...constraints: QueryConstraint[]
-): Query {
-  if (!userId) {
-    throw new Error("Authentication required to access notes.");
-  }
-  return query(
-    collection(getDb(), COLLECTION),
-    where("userId", "==", userId),
-    ...constraints,
-  );
+// In-memory cache of all notes — chat re-reads on every question, so caching
+// trims a round-trip to Firestore.
+let allNotesCache: { notes: Note[]; at: number } | null = null;
+const ALL_NOTES_TTL = 30_000;
+
+export function invalidateNotesCache(): void {
+  allNotesCache = null;
 }
 
 export async function saveNote(input: {
@@ -53,28 +46,11 @@ export async function saveNote(input: {
   lng?: number | null;
   city?: string | null;
 }): Promise<void> {
-  // Check if this is a guest user (userId starts with "guest_")
-  if (input.userId?.startsWith("guest_")) {
-    // Save locally for guest users
-    const { saveNoteLocally } = await import("./local-notes");
-    saveNoteLocally({
-      originalTranscript: input.originalTranscript,
-      cleanedText: input.cleanedText,
-      keywords: input.keywords,
-      bucket: input.bucket,
-      place: input.place,
-      lat: input.lat,
-      lng: input.lng,
-      city: input.city,
-    });
-    return;
-  }
-
-  // Save to Firebase for regular users
   await addDoc(collection(getDb(), COLLECTION), {
     ...input,
     createdAt: serverTimestamp(),
   });
+  invalidateNotesCache();
 }
 
 function mapDoc(id: string, data: Record<string, unknown>): Note {
@@ -94,38 +70,21 @@ function mapDoc(id: string, data: Record<string, unknown>): Note {
   };
 }
 
-export async function getAllNotes(userId?: string): Promise<Note[]> {
-  // Check if this is a guest user
-  if (userId?.startsWith("guest_")) {
-    // Return local notes for guest users
-    const { getLocalNotesAsNotes } = await import("./local-notes");
-    return getLocalNotesAsNotes().sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    );
+export async function getAllNotes(): Promise<Note[]> {
+  if (allNotesCache && Date.now() - allNotesCache.at < ALL_NOTES_TTL) {
+    return allNotesCache.notes;
   }
-
-  // Return Firebase notes for regular users
-  const q = notesQueryForUser(userId, orderBy("createdAt", "desc"));
+  const q = query(collection(getDb(), COLLECTION), orderBy("createdAt", "desc"));
   const snap = await getDocs(q);
-  return snap.docs.map((d) => mapDoc(d.id, d.data()));
+  const notes = snap.docs.map((d) => mapDoc(d.id, d.data()));
+  allNotesCache = { notes, at: Date.now() };
+  return notes;
 }
 
-export async function getNotesLast24h(userId?: string): Promise<Note[]> {
-  // Check if this is a guest user
-  if (userId?.startsWith("guest_")) {
-    // Return local notes for guest users
-    const { getLocalNotesAsNotes } = await import("./local-notes");
-    const allNotes = getLocalNotesAsNotes();
-    const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    return allNotes
-      .filter((note) => note.createdAt >= since)
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-  }
-
-  // Return Firebase notes for regular users
+export async function getNotesLast24h(): Promise<Note[]> {
   const since = Timestamp.fromDate(new Date(Date.now() - 24 * 60 * 60 * 1000));
-  const q = notesQueryForUser(
-    userId,
+  const q = query(
+    collection(getDb(), COLLECTION),
     where("createdAt", ">=", since),
     orderBy("createdAt", "asc"),
   );
@@ -133,33 +92,14 @@ export async function getNotesLast24h(userId?: string): Promise<Note[]> {
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-export async function getNotesForDate(
-  date: Date,
-  userId?: string,
-): Promise<Note[]> {
-  // Check if this is a guest user
-  if (userId?.startsWith("guest_")) {
-    // Return local notes for guest users
-    const { getLocalNotesAsNotes } = await import("./local-notes");
-    const allNotes = getLocalNotesAsNotes();
-    const start = new Date(date);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(start);
-    end.setDate(end.getDate() + 1);
-
-    return allNotes
-      .filter((note) => note.createdAt >= start && note.createdAt < end)
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-  }
-
-  // Return Firebase notes for regular users
+export async function getNotesForDate(date: Date): Promise<Note[]> {
   const start = new Date(date);
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
   end.setDate(end.getDate() + 1);
 
-  const q = notesQueryForUser(
-    userId,
+  const q = query(
+    collection(getDb(), COLLECTION),
     where("createdAt", ">=", Timestamp.fromDate(start)),
     where("createdAt", "<", Timestamp.fromDate(end)),
     orderBy("createdAt", "asc"),
@@ -168,13 +108,9 @@ export async function getNotesForDate(
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-export async function getNotesForDateRange(
-  start: Date,
-  end: Date,
-  userId?: string,
-): Promise<Note[]> {
-  const q = notesQueryForUser(
-    userId,
+export async function getNotesForDateRange(start: Date, end: Date): Promise<Note[]> {
+  const q = query(
+    collection(getDb(), COLLECTION),
     where("createdAt", ">=", Timestamp.fromDate(start)),
     where("createdAt", "<", Timestamp.fromDate(end)),
     orderBy("createdAt", "asc"),

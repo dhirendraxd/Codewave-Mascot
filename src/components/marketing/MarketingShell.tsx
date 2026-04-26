@@ -19,14 +19,12 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="absolute inset-x-0 top-0 z-40 bg-transparent">
-        <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-10">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link to="/" className="flex items-center gap-2">
             <span className="relative flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-card shadow-[var(--shadow-ember)]">
               <span className="h-1.5 w-1.5 rounded-full bg-background" />
             </span>
-            <span className="text-base font-semibold tracking-tight">
-              MemoryMesh
-            </span>
+            <span className="text-base font-semibold tracking-tight">MemoryMesh</span>
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) => {
@@ -69,7 +67,7 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
         </div>
         {open && (
           <div className="border-t border-border/40 bg-background md:hidden">
-            <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-1 px-4 py-3 sm:px-6 lg:px-10">
+            <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6">
               {navLinks.map((l) => (
                 <Link
                   key={l.to}
@@ -99,85 +97,36 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
       <main>{children}</main>
 
       <footer className="border-t border-border/40 bg-background">
-        <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-10">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_var(--ember-glow)]" />
               <span className="text-base font-semibold">MemoryMesh</span>
             </div>
             <p className="mt-3 max-w-sm text-sm text-muted-foreground">
-              An audio-first second brain. Speak your messy thoughts, recall
-              them with AI.
+              An audio-first second brain. Speak your messy thoughts, recall them with AI.
             </p>
           </div>
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Product
-            </h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Product</h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <Link
-                  to="/features"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/how-it-works"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  How it works
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/pricing"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Pricing
-                </Link>
-              </li>
+              <li><Link to="/features" className="text-muted-foreground hover:text-foreground">Features</Link></li>
+              <li><Link to="/how-it-works" className="text-muted-foreground hover:text-foreground">How it works</Link></li>
+              <li><Link to="/pricing" className="text-muted-foreground hover:text-foreground">Pricing</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Account
-            </h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Account</h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <Link
-                  to="/login"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Log in
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/signup"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Sign up
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/dashboard"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Dashboard
-                </Link>
-              </li>
+              <li><Link to="/login" className="text-muted-foreground hover:text-foreground">Log in</Link></li>
+              <li><Link to="/signup" className="text-muted-foreground hover:text-foreground">Sign up</Link></li>
+              <li><Link to="/dashboard" className="text-muted-foreground hover:text-foreground">Dashboard</Link></li>
             </ul>
           </div>
         </div>
         <div className="border-t border-border/40">
-          <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-10">
-            <p>
-              © {new Date().getFullYear()} MemoryMesh. All thoughts welcome.
-            </p>
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
+            <p>© {new Date().getFullYear()} MemoryMesh. All thoughts welcome.</p>
             <p>Built with care · Voice-first · AI-powered recall</p>
           </div>
         </div>
