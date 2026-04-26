@@ -1,5 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Brain, Calendar, Hash, Loader2, Mic, Sparkles, TrendingUp } from "lucide-react";
+import {
+  Brain,
+  Calendar,
+  Hash,
+  Loader2,
+  Mic,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   Area,
@@ -76,8 +84,12 @@ export function DashboardContent() {
   const stats = useMemo(() => {
     const now = Date.now();
     const dayMs = 24 * 60 * 60 * 1000;
-    const today = notes.filter((n) => now - n.createdAt.getTime() < dayMs).length;
-    const week = notes.filter((n) => now - n.createdAt.getTime() < 7 * dayMs).length;
+    const today = notes.filter(
+      (n) => now - n.createdAt.getTime() < dayMs,
+    ).length;
+    const week = notes.filter(
+      (n) => now - n.createdAt.getTime() < 7 * dayMs,
+    ).length;
     const allKeywords = notes.flatMap((n) => n.keywords);
     const uniqueKeywords = new Set(allKeywords.map((k) => k.toLowerCase()));
     return {
@@ -89,7 +101,10 @@ export function DashboardContent() {
   }, [notes]);
 
   const chartData = useMemo(() => {
-    const buckets = new Map<string, { date: string; label: string; count: number }>();
+    const buckets = new Map<
+      string,
+      { date: string; label: string; count: number }
+    >();
     for (let i = 29; i >= 0; i--) {
       const d = new Date();
       d.setHours(0, 0, 0, 0);
@@ -149,12 +164,18 @@ export function DashboardContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Dashboard
+          </h1>
           <p className="text-muted-foreground mt-1">
-            Welcome back, {user?.displayName || "Guest"}. Here's your memory overview.
+            Welcome back, {user?.displayName || "Guest"}. Here's your memory
+            overview.
           </p>
         </div>
-        <Link to="/capture" className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+        <Link
+          to="/capture"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+        >
           <Mic className="h-4 w-4" />
           Capture new memory
         </Link>
@@ -165,7 +186,9 @@ export function DashboardContent() {
         <div className="rounded-lg border bg-card p-6">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <p className="text-sm font-medium text-muted-foreground">Total Memories</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              Total Memories
+            </p>
           </div>
           <p className="text-3xl font-bold mt-2">{stats.total}</p>
         </div>
@@ -179,14 +202,18 @@ export function DashboardContent() {
         <div className="rounded-lg border bg-card p-6">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
-            <p className="text-sm font-medium text-muted-foreground">This Week</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              This Week
+            </p>
           </div>
           <p className="text-3xl font-bold mt-2">{stats.week}</p>
         </div>
         <div className="rounded-lg border bg-card p-6">
           <div className="flex items-center gap-2">
             <Hash className="h-5 w-5 text-primary" />
-            <p className="text-sm font-medium text-muted-foreground">Unique Keywords</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              Unique Keywords
+            </p>
           </div>
           <p className="text-3xl font-bold mt-2">{stats.uniqueKeywords}</p>
         </div>
@@ -194,14 +221,24 @@ export function DashboardContent() {
 
       {/* Chart */}
       <div className="rounded-lg border bg-card p-6">
-        <h2 className="text-xl font-semibold mb-4">Memory Activity (Last 30 Days)</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Memory Activity (Last 30 Days)
+        </h2>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  <stop
+                    offset="5%"
+                    stopColor="hsl(var(--primary))"
+                    stopOpacity={0.3}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="hsl(var(--primary))"
+                    stopOpacity={0}
+                  />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -237,14 +274,28 @@ export function DashboardContent() {
           <h2 className="text-xl font-semibold mb-4">Recent Memories</h2>
           <div className="space-y-4">
             {notes.slice(0, 5).map((note) => (
-              <div key={note.id} className="flex items-start gap-3 p-3 rounded-md bg-muted/50">
-                <div className={cn("w-3 h-3 rounded-full mt-1.5 shrink-0", bucketColor(note.bucket))} />
+              <div
+                key={note.id}
+                className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
+              >
+                <div
+                  className={cn(
+                    "w-3 h-3 rounded-full mt-1.5 shrink-0",
+                    bucketColor(note.bucket),
+                  )}
+                />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{note.cleanedText}</p>
+                  <p className="text-sm font-medium truncate">
+                    {note.cleanedText}
+                  </p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-muted-foreground">{note.bucket}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {note.bucket}
+                    </span>
                     <span className="text-xs text-muted-foreground">•</span>
-                    <span className="text-xs text-muted-foreground">{relativeTime(note.createdAt)}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {relativeTime(note.createdAt)}
+                    </span>
                   </div>
                   {note.keywords.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
@@ -264,7 +315,9 @@ export function DashboardContent() {
             {notes.length === 0 && (
               <div className="text-center py-8">
                 <Mic className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No memories yet. Start capturing!</p>
+                <p className="text-muted-foreground">
+                  No memories yet. Start capturing!
+                </p>
                 <Link
                   to="/capture"
                   className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
@@ -293,12 +346,16 @@ export function DashboardContent() {
                       style={{ width: `${(count / maxKeyword) * 100}%` }}
                     />
                   </div>
-                  <span className="text-sm text-muted-foreground w-8 text-right">{count}</span>
+                  <span className="text-sm text-muted-foreground w-8 text-right">
+                    {count}
+                  </span>
                 </div>
               </div>
             ))}
             {topKeywords.length === 0 && (
-              <p className="text-muted-foreground text-center py-8">No keywords yet</p>
+              <p className="text-muted-foreground text-center py-8">
+                No keywords yet
+              </p>
             )}
           </div>
         </div>
@@ -310,11 +367,18 @@ export function DashboardContent() {
           <h2 className="text-xl font-semibold mb-4">Memory Buckets</h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {bucketGroups.map(([bucket, notes]) => (
-              <div key={bucket} className="flex items-center gap-3 p-4 rounded-md bg-muted/50">
-                <div className={cn("w-4 h-4 rounded-full", bucketColor(bucket))} />
+              <div
+                key={bucket}
+                className="flex items-center gap-3 p-4 rounded-md bg-muted/50"
+              >
+                <div
+                  className={cn("w-4 h-4 rounded-full", bucketColor(bucket))}
+                />
                 <div>
                   <p className="font-medium">{bucket}</p>
-                  <p className="text-sm text-muted-foreground">{notes.length} memories</p>
+                  <p className="text-sm text-muted-foreground">
+                    {notes.length} memories
+                  </p>
                 </div>
               </div>
             ))}

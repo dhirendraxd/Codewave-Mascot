@@ -4,7 +4,9 @@ export interface GeoCapture {
   city: string | null;
 }
 
-export async function tryCaptureGeolocation(timeoutMs = 5000): Promise<GeoCapture | null> {
+export async function tryCaptureGeolocation(
+  timeoutMs = 5000,
+): Promise<GeoCapture | null> {
   if (typeof navigator === "undefined" || !navigator.geolocation) return null;
   const coords = await new Promise<GeolocationCoordinates | null>((resolve) => {
     const timer = setTimeout(() => resolve(null), timeoutMs);
@@ -17,7 +19,11 @@ export async function tryCaptureGeolocation(timeoutMs = 5000): Promise<GeoCaptur
         clearTimeout(timer);
         resolve(null);
       },
-      { enableHighAccuracy: false, timeout: timeoutMs, maximumAge: 5 * 60 * 1000 },
+      {
+        enableHighAccuracy: false,
+        timeout: timeoutMs,
+        maximumAge: 5 * 60 * 1000,
+      },
     );
   });
   if (!coords) return null;

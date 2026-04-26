@@ -21,7 +21,10 @@ export function ChatView() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [messages, pending]);
 
   const askQuestion = async (question: string) => {
@@ -51,7 +54,10 @@ export function ChatView() {
           place: n.place ?? n.city ?? null,
         })),
       );
-      setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", content: reply }]);
+      setMessages((m) => [
+        ...m,
+        { id: crypto.randomUUID(), role: "assistant", content: reply },
+      ]);
     } catch (err) {
       const { title, description } = friendlyError(stage, err);
       notifyError(stage, err, () => {
@@ -73,7 +79,11 @@ export function ChatView() {
   const handleSend = async () => {
     const question = input.trim();
     if (!question || pending) return;
-    const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: question };
+    const userMsg: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: question,
+    };
     setMessages((m) => [...m, userMsg]);
     setInput("");
     await askQuestion(question);

@@ -6,19 +6,47 @@ export const Route = createFileRoute("/how-it-works")({
   head: () => ({
     meta: [
       { title: "How it works — MemoryMesh" },
-      { name: "description", content: "Speak, organize, connect, recall. Four steps from raw thought to retrievable memory." },
+      {
+        name: "description",
+        content:
+          "Speak, organize, connect, recall. Four steps from raw thought to retrievable memory.",
+      },
       { property: "og:title", content: "How it works — MemoryMesh" },
-      { property: "og:description", content: "Speak, organize, connect, recall. Four steps from raw thought to retrievable memory." },
+      {
+        property: "og:description",
+        content:
+          "Speak, organize, connect, recall. Four steps from raw thought to retrievable memory.",
+      },
     ],
   }),
   component: HowPage,
 });
 
 const steps = [
-  { n: "01", icon: Mic, title: "Speak it", body: "Hit the mic. Your stream-of-consciousness is transcribed live in your browser — privately, instantly." },
-  { n: "02", icon: Sparkles, title: "AI organizes", body: "Gemini cleans the transcript, pulls keywords, infers a bucket, and tags location if shared." },
-  { n: "03", icon: Network, title: "Connections form", body: "Each memory automatically links to related ones — by topic, time, keywords, or place." },
-  { n: "04", icon: MessageSquare, title: "Recall on demand", body: "Ask the chat anything. Relevant memories surface with full context and citations." },
+  {
+    n: "01",
+    icon: Mic,
+    title: "Speak it",
+    body: "Hit the mic. Your stream-of-consciousness is transcribed live in your browser — privately, instantly.",
+  },
+  {
+    n: "02",
+    icon: Sparkles,
+    title: "AI organizes",
+    body: "Gemini cleans the transcript, pulls keywords, infers a bucket, and tags location if shared.",
+  },
+  {
+    n: "03",
+    icon: Network,
+    title: "Connections form",
+    body: "Each memory automatically links to related ones — by topic, time, keywords, or place.",
+  },
+  {
+    n: "04",
+    icon: MessageSquare,
+    title: "Recall on demand",
+    body: "Ask the chat anything. Relevant memories surface with full context and citations.",
+  },
 ];
 
 function HowPage() {
@@ -47,9 +75,15 @@ function HowPage() {
                 <Icon className="h-6 w-6" />
               </div>
               <div className="flex-1 rounded-2xl border border-border/50 bg-card/40 p-6">
-                <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">Step {n}</div>
-                <h3 className="mt-2 text-xl font-semibold text-foreground">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+                <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
+                  Step {n}
+                </div>
+                <h3 className="mt-2 text-xl font-semibold text-foreground">
+                  {title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {body}
+                </p>
               </div>
             </div>
           ))}

@@ -24,7 +24,9 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
             <span className="relative flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-card shadow-[var(--shadow-ember)]">
               <span className="h-1.5 w-1.5 rounded-full bg-background" />
             </span>
-            <span className="text-base font-semibold tracking-tight">MemoryMesh</span>
+            <span className="text-base font-semibold tracking-tight">
+              MemoryMesh
+            </span>
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) => {
@@ -104,29 +106,78 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
               <span className="text-base font-semibold">MemoryMesh</span>
             </div>
             <p className="mt-3 max-w-sm text-sm text-muted-foreground">
-              An audio-first second brain. Speak your messy thoughts, recall them with AI.
+              An audio-first second brain. Speak your messy thoughts, recall
+              them with AI.
             </p>
           </div>
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Product</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Product
+            </h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><Link to="/features" className="text-muted-foreground hover:text-foreground">Features</Link></li>
-              <li><Link to="/how-it-works" className="text-muted-foreground hover:text-foreground">How it works</Link></li>
-              <li><Link to="/pricing" className="text-muted-foreground hover:text-foreground">Pricing</Link></li>
+              <li>
+                <Link
+                  to="/features"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Features
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/how-it-works"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  How it works
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pricing"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Pricing
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Account</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Account
+            </h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><Link to="/login" className="text-muted-foreground hover:text-foreground">Log in</Link></li>
-              <li><Link to="/signup" className="text-muted-foreground hover:text-foreground">Sign up</Link></li>
-              <li><Link to="/dashboard" className="text-muted-foreground hover:text-foreground">Dashboard</Link></li>
+              <li>
+                <Link
+                  to="/login"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Log in
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/signup"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Sign up
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/dashboard"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Dashboard
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
         <div className="border-t border-border/40">
           <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-10">
-            <p>© {new Date().getFullYear()} MemoryMesh. All thoughts welcome.</p>
+            <p>
+              © {new Date().getFullYear()} MemoryMesh. All thoughts welcome.
+            </p>
             <p>Built with care · Voice-first · AI-powered recall</p>
           </div>
         </div>

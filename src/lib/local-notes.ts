@@ -2,11 +2,13 @@ import type { Note } from "./notes";
 
 const LOCAL_NOTES_KEY = "memorymesh_guest_notes";
 
-export interface LocalNote extends Omit<Note, 'createdAt'> {
+export interface LocalNote extends Omit<Note, "createdAt"> {
   createdAt: string; // Store as ISO string for localStorage
 }
 
-export function saveNoteLocally(note: Omit<Note, 'id' | 'createdAt'> & { createdAt?: Date }): string {
+export function saveNoteLocally(
+  note: Omit<Note, "id" | "createdAt"> & { createdAt?: Date },
+): string {
   const notes = getLocalNotes();
   const id = `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   const localNote: LocalNote = {
@@ -30,7 +32,7 @@ export function getLocalNotes(): LocalNote[] {
 }
 
 export function getLocalNotesAsNotes(): Note[] {
-  return getLocalNotes().map(localNote => ({
+  return getLocalNotes().map((localNote) => ({
     ...localNote,
     createdAt: new Date(localNote.createdAt),
   }));
@@ -40,7 +42,10 @@ export function clearLocalNotes(): void {
   localStorage.removeItem(LOCAL_NOTES_KEY);
 }
 
-export async function syncGuestDataToFirebase(guestUserId: string, firebaseUserId: string): Promise<void> {
+export async function syncGuestDataToFirebase(
+  guestUserId: string,
+  firebaseUserId: string,
+): Promise<void> {
   const localNotes = getLocalNotes();
 
   if (localNotes.length === 0) {

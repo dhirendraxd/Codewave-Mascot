@@ -61,7 +61,9 @@ export function BucketsContent() {
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
       <div className="mb-6 flex items-center gap-2">
         <Boxes className="h-5 w-5 text-primary" />
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Buckets</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          Buckets
+        </h1>
       </div>
       <p className="mb-8 text-sm text-muted-foreground">
         Memories auto-grouped by topic. The AI invents the bucket as you talk.
@@ -89,12 +91,20 @@ export function BucketsContent() {
                   style={{ backgroundColor: c.bg }}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: c.dot }} />
-                    <span className="text-sm font-semibold" style={{ color: c.text }}>
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: c.dot }}
+                    />
+                    <span
+                      className="text-sm font-semibold"
+                      style={{ color: c.text }}
+                    >
                       {g.name}
                     </span>
                   </div>
-                  <span className="text-xs text-muted-foreground">{g.notes.length}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {g.notes.length}
+                  </span>
                 </div>
                 <div className="flex max-h-[70vh] flex-col gap-2 overflow-y-auto p-3">
                   {g.notes.map((n) => (
@@ -102,7 +112,9 @@ export function BucketsContent() {
                       key={n.id}
                       className="rounded-lg border border-border/60 bg-background p-3 transition-colors hover:border-primary/40"
                     >
-                      <p className="line-clamp-3 text-sm text-foreground">{n.cleanedText}</p>
+                      <p className="line-clamp-3 text-sm text-foreground">
+                        {n.cleanedText}
+                      </p>
                       <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-muted-foreground">
                         <span className="inline-flex items-center gap-1">
                           <Calendar className="h-3 w-3" />

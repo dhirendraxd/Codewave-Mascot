@@ -8,250 +8,250 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as HowItWorksRouteImport } from './routes/how-it-works'
-import { Route as GraphRouteImport } from './routes/graph'
-import { Route as FeaturesRouteImport } from './routes/features'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ChatRouteImport } from './routes/chat'
-import { Route as CaptureRouteImport } from './routes/capture'
-import { Route as BucketsRouteImport } from './routes/buckets'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as SignupRouteImport } from "./routes/signup";
+import { Route as PricingRouteImport } from "./routes/pricing";
+import { Route as LoginRouteImport } from "./routes/login";
+import { Route as HowItWorksRouteImport } from "./routes/how-it-works";
+import { Route as GraphRouteImport } from "./routes/graph";
+import { Route as FeaturesRouteImport } from "./routes/features";
+import { Route as DashboardRouteImport } from "./routes/dashboard";
+import { Route as ChatRouteImport } from "./routes/chat";
+import { Route as CaptureRouteImport } from "./routes/capture";
+import { Route as BucketsRouteImport } from "./routes/buckets";
+import { Route as IndexRouteImport } from "./routes/index";
 
 const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+  id: "/signup",
+  path: "/signup",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
+  id: "/pricing",
+  path: "/pricing",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const HowItWorksRoute = HowItWorksRouteImport.update({
-  id: '/how-it-works',
-  path: '/how-it-works',
+  id: "/how-it-works",
+  path: "/how-it-works",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const GraphRoute = GraphRouteImport.update({
-  id: '/graph',
-  path: '/graph',
+  id: "/graph",
+  path: "/graph",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const FeaturesRoute = FeaturesRouteImport.update({
-  id: '/features',
-  path: '/features',
+  id: "/features",
+  path: "/features",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+  id: "/dashboard",
+  path: "/dashboard",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ChatRoute = ChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
+  id: "/chat",
+  path: "/chat",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const CaptureRoute = CaptureRouteImport.update({
-  id: '/capture',
-  path: '/capture',
+  id: "/capture",
+  path: "/capture",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const BucketsRoute = BucketsRouteImport.update({
-  id: '/buckets',
-  path: '/buckets',
+  id: "/buckets",
+  path: "/buckets",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/buckets': typeof BucketsRoute
-  '/capture': typeof CaptureRoute
-  '/chat': typeof ChatRoute
-  '/dashboard': typeof DashboardRoute
-  '/features': typeof FeaturesRoute
-  '/graph': typeof GraphRoute
-  '/how-it-works': typeof HowItWorksRoute
-  '/login': typeof LoginRoute
-  '/pricing': typeof PricingRoute
-  '/signup': typeof SignupRoute
+  "/": typeof IndexRoute;
+  "/buckets": typeof BucketsRoute;
+  "/capture": typeof CaptureRoute;
+  "/chat": typeof ChatRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/features": typeof FeaturesRoute;
+  "/graph": typeof GraphRoute;
+  "/how-it-works": typeof HowItWorksRoute;
+  "/login": typeof LoginRoute;
+  "/pricing": typeof PricingRoute;
+  "/signup": typeof SignupRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/buckets': typeof BucketsRoute
-  '/capture': typeof CaptureRoute
-  '/chat': typeof ChatRoute
-  '/dashboard': typeof DashboardRoute
-  '/features': typeof FeaturesRoute
-  '/graph': typeof GraphRoute
-  '/how-it-works': typeof HowItWorksRoute
-  '/login': typeof LoginRoute
-  '/pricing': typeof PricingRoute
-  '/signup': typeof SignupRoute
+  "/": typeof IndexRoute;
+  "/buckets": typeof BucketsRoute;
+  "/capture": typeof CaptureRoute;
+  "/chat": typeof ChatRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/features": typeof FeaturesRoute;
+  "/graph": typeof GraphRoute;
+  "/how-it-works": typeof HowItWorksRoute;
+  "/login": typeof LoginRoute;
+  "/pricing": typeof PricingRoute;
+  "/signup": typeof SignupRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/buckets': typeof BucketsRoute
-  '/capture': typeof CaptureRoute
-  '/chat': typeof ChatRoute
-  '/dashboard': typeof DashboardRoute
-  '/features': typeof FeaturesRoute
-  '/graph': typeof GraphRoute
-  '/how-it-works': typeof HowItWorksRoute
-  '/login': typeof LoginRoute
-  '/pricing': typeof PricingRoute
-  '/signup': typeof SignupRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/buckets": typeof BucketsRoute;
+  "/capture": typeof CaptureRoute;
+  "/chat": typeof ChatRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/features": typeof FeaturesRoute;
+  "/graph": typeof GraphRoute;
+  "/how-it-works": typeof HowItWorksRoute;
+  "/login": typeof LoginRoute;
+  "/pricing": typeof PricingRoute;
+  "/signup": typeof SignupRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/buckets'
-    | '/capture'
-    | '/chat'
-    | '/dashboard'
-    | '/features'
-    | '/graph'
-    | '/how-it-works'
-    | '/login'
-    | '/pricing'
-    | '/signup'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/buckets"
+    | "/capture"
+    | "/chat"
+    | "/dashboard"
+    | "/features"
+    | "/graph"
+    | "/how-it-works"
+    | "/login"
+    | "/pricing"
+    | "/signup";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/buckets'
-    | '/capture'
-    | '/chat'
-    | '/dashboard'
-    | '/features'
-    | '/graph'
-    | '/how-it-works'
-    | '/login'
-    | '/pricing'
-    | '/signup'
+    | "/"
+    | "/buckets"
+    | "/capture"
+    | "/chat"
+    | "/dashboard"
+    | "/features"
+    | "/graph"
+    | "/how-it-works"
+    | "/login"
+    | "/pricing"
+    | "/signup";
   id:
-    | '__root__'
-    | '/'
-    | '/buckets'
-    | '/capture'
-    | '/chat'
-    | '/dashboard'
-    | '/features'
-    | '/graph'
-    | '/how-it-works'
-    | '/login'
-    | '/pricing'
-    | '/signup'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/buckets"
+    | "/capture"
+    | "/chat"
+    | "/dashboard"
+    | "/features"
+    | "/graph"
+    | "/how-it-works"
+    | "/login"
+    | "/pricing"
+    | "/signup";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  BucketsRoute: typeof BucketsRoute
-  CaptureRoute: typeof CaptureRoute
-  ChatRoute: typeof ChatRoute
-  DashboardRoute: typeof DashboardRoute
-  FeaturesRoute: typeof FeaturesRoute
-  GraphRoute: typeof GraphRoute
-  HowItWorksRoute: typeof HowItWorksRoute
-  LoginRoute: typeof LoginRoute
-  PricingRoute: typeof PricingRoute
-  SignupRoute: typeof SignupRoute
+  IndexRoute: typeof IndexRoute;
+  BucketsRoute: typeof BucketsRoute;
+  CaptureRoute: typeof CaptureRoute;
+  ChatRoute: typeof ChatRoute;
+  DashboardRoute: typeof DashboardRoute;
+  FeaturesRoute: typeof FeaturesRoute;
+  GraphRoute: typeof GraphRoute;
+  HowItWorksRoute: typeof HowItWorksRoute;
+  LoginRoute: typeof LoginRoute;
+  PricingRoute: typeof PricingRoute;
+  SignupRoute: typeof SignupRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/how-it-works': {
-      id: '/how-it-works'
-      path: '/how-it-works'
-      fullPath: '/how-it-works'
-      preLoaderRoute: typeof HowItWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/graph': {
-      id: '/graph'
-      path: '/graph'
-      fullPath: '/graph'
-      preLoaderRoute: typeof GraphRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features': {
-      id: '/features'
-      path: '/features'
-      fullPath: '/features'
-      preLoaderRoute: typeof FeaturesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/chat': {
-      id: '/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof ChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/capture': {
-      id: '/capture'
-      path: '/capture'
-      fullPath: '/capture'
-      preLoaderRoute: typeof CaptureRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/buckets': {
-      id: '/buckets'
-      path: '/buckets'
-      fullPath: '/buckets'
-      preLoaderRoute: typeof BucketsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/signup": {
+      id: "/signup";
+      path: "/signup";
+      fullPath: "/signup";
+      preLoaderRoute: typeof SignupRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/pricing": {
+      id: "/pricing";
+      path: "/pricing";
+      fullPath: "/pricing";
+      preLoaderRoute: typeof PricingRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/login": {
+      id: "/login";
+      path: "/login";
+      fullPath: "/login";
+      preLoaderRoute: typeof LoginRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/how-it-works": {
+      id: "/how-it-works";
+      path: "/how-it-works";
+      fullPath: "/how-it-works";
+      preLoaderRoute: typeof HowItWorksRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/graph": {
+      id: "/graph";
+      path: "/graph";
+      fullPath: "/graph";
+      preLoaderRoute: typeof GraphRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/features": {
+      id: "/features";
+      path: "/features";
+      fullPath: "/features";
+      preLoaderRoute: typeof FeaturesRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/dashboard": {
+      id: "/dashboard";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof DashboardRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/chat": {
+      id: "/chat";
+      path: "/chat";
+      fullPath: "/chat";
+      preLoaderRoute: typeof ChatRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/capture": {
+      id: "/capture";
+      path: "/capture";
+      fullPath: "/capture";
+      preLoaderRoute: typeof CaptureRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/buckets": {
+      id: "/buckets";
+      path: "/buckets";
+      fullPath: "/buckets";
+      preLoaderRoute: typeof BucketsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -267,16 +267,16 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
+import type { getRouter } from "./router.tsx";
+import type { createStart } from "@tanstack/react-start";
+declare module "@tanstack/react-start" {
   interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
   }
 }

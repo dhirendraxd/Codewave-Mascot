@@ -52,14 +52,24 @@ function buildEdges(notes: Note[]): GraphEdge[] {
         reasons.push(`same place: ${placeA}`);
       }
       if (strength >= 2) {
-        edges.push({ source: a.id, target: b.id, strength, reason: reasons.join(" • ") });
+        edges.push({
+          source: a.id,
+          target: b.id,
+          strength,
+          reason: reasons.join(" • "),
+        });
       }
     }
   }
   return edges;
 }
 
-function useForceLayout(notes: Note[], edges: GraphEdge[], width: number, height: number) {
+function useForceLayout(
+  notes: Note[],
+  edges: GraphEdge[],
+  width: number,
+  height: number,
+) {
   const [nodes, setNodes] = useState<GraphNode[]>([]);
 
   useEffect(() => {
@@ -68,7 +78,14 @@ function useForceLayout(notes: Note[], edges: GraphEdge[], width: number, height
     const initial: GraphNode[] = notes.map((n, i) => {
       const angle = (i / Math.max(1, notes.length)) * Math.PI * 2;
       const r = Math.min(width, height) * 0.3;
-      return { id: n.id, note: n, x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r, vx: 0, vy: 0 };
+      return {
+        id: n.id,
+        note: n,
+        x: cx + Math.cos(angle) * r,
+        y: cy + Math.sin(angle) * r,
+        vx: 0,
+        vy: 0,
+      };
     });
 
     // Simple force-directed: repulsion + edge attraction + center gravity
@@ -173,7 +190,8 @@ export function GraphContent() {
   useEffect(() => {
     if (!containerRef.current) return;
     const el = containerRef.current;
-    const update = () => setSize({ w: el.clientWidth, h: Math.max(500, el.clientHeight) });
+    const update = () =>
+      setSize({ w: el.clientWidth, h: Math.max(500, el.clientHeight) });
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
@@ -200,7 +218,9 @@ export function GraphContent() {
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-8 sm:px-6">
       <div className="mb-2 flex items-center gap-2">
         <Network className="h-5 w-5 text-primary" />
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Connections</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          Connections
+        </h1>
       </div>
       <p className="mb-6 text-sm text-muted-foreground">
         Memories connected by shared bucket, keywords, time, and place.
@@ -208,8 +228,12 @@ export function GraphContent() {
 
       {notes.length < 2 ? (
         <div className="rounded-2xl border border-dashed border-border bg-card/40 p-10 text-center">
-          <p className="text-sm text-foreground">Need at least 2 memories to draw a graph.</p>
-          <p className="mt-1 text-xs text-muted-foreground">Capture a few more thoughts.</p>
+          <p className="text-sm text-foreground">
+            Need at least 2 memories to draw a graph.
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Capture a few more thoughts.
+          </p>
         </div>
       ) : (
         <div
@@ -222,7 +246,8 @@ export function GraphContent() {
               const a = nodeMap.get(e.source);
               const b = nodeMap.get(e.target);
               if (!a || !b) return null;
-              const isHi = hovered && (e.source === hovered || e.target === hovered);
+              const isHi =
+                hovered && (e.source === hovered || e.target === hovered);
               return (
                 <line
                   key={i}
@@ -238,20 +263,32 @@ export function GraphContent() {
             })}
             {nodes.map((n) => {
               const c = bucketColor(n.note.bucket || "General");
-              const r = 8 + Math.min(8, edges.filter((e) => e.source === n.id || e.target === n.id).length);
+              const r =
+                8 +
+                Math.min(
+                  8,
+                  edges.filter((e) => e.source === n.id || e.target === n.id)
+                    .length,
+                );
               const isHi = hovered === n.id;
               return (
                 <g
                   key={n.id}
                   transform={`translate(${n.x}, ${n.y})`}
                   onMouseEnter={() => setHovered(n.id)}
-                  onMouseLeave={() => setHovered((h) => (h === n.id ? null : h))}
+                  onMouseLeave={() =>
+                    setHovered((h) => (h === n.id ? null : h))
+                  }
                   style={{ cursor: "pointer" }}
                 >
                   <circle
                     r={r}
                     fill={c.dot}
-                    stroke={isHi ? "var(--color-foreground)" : "var(--color-background)"}
+                    stroke={
+                      isHi
+                        ? "var(--color-foreground)"
+                        : "var(--color-background)"
+                    }
                     strokeWidth={isHi ? 2 : 1.5}
                   />
                 </g>
@@ -264,13 +301,19 @@ export function GraphContent() {
               <div className="mb-1 flex items-center gap-2">
                 <span
                   className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: bucketColor(hoveredNode.note.bucket || "General").dot }}
+                  style={{
+                    backgroundColor: bucketColor(
+                      hoveredNode.note.bucket || "General",
+                    ).dot,
+                  }}
                 />
                 <span className="text-xs font-semibold text-foreground">
                   {hoveredNode.note.bucket || "General"}
                 </span>
               </div>
-              <p className="text-sm text-foreground">{hoveredNode.note.cleanedText}</p>
+              <p className="text-sm text-foreground">
+                {hoveredNode.note.cleanedText}
+              </p>
               <div className="mt-2 text-[11px] text-muted-foreground">
                 {hoveredNode.note.createdAt.toLocaleString()}
                 {(hoveredNode.note.place || hoveredNode.note.city) &&
@@ -278,7 +321,9 @@ export function GraphContent() {
               </div>
               {hoveredEdges.length > 0 && (
                 <div className="mt-2 border-t border-border/60 pt-2 text-[11px] text-muted-foreground">
-                  <div className="mb-1 font-medium text-foreground">Connected to {hoveredEdges.length}</div>
+                  <div className="mb-1 font-medium text-foreground">
+                    Connected to {hoveredEdges.length}
+                  </div>
                   {hoveredEdges.slice(0, 3).map((e, i) => (
                     <div key={i} className="truncate">
                       • {e.reason}

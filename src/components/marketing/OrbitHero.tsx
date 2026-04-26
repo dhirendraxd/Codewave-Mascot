@@ -1,4 +1,13 @@
-import { Mic, MapPin, MessageSquare, Sparkles, Boxes, Hash, Calendar, Brain } from "lucide-react";
+import {
+  Mic,
+  MapPin,
+  MessageSquare,
+  Sparkles,
+  Boxes,
+  Hash,
+  Calendar,
+  Brain,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 /**
@@ -19,7 +28,13 @@ interface Ring {
   items: OrbitItem[];
 }
 
-function IconBubble({ icon: Icon, color }: { icon: LucideIcon; color: string }) {
+function IconBubble({
+  icon: Icon,
+  color,
+}: {
+  icon: LucideIcon;
+  color: string;
+}) {
   return (
     <div
       className="flex h-10 w-10 items-center justify-center rounded-full ring-1 backdrop-blur-md"
@@ -116,13 +131,21 @@ export function OrbitHero() {
               <div
                 key={j}
                 className="absolute left-1/2 top-1/2"
-                style={{ transform: `translate(${x}px, ${y}px) translate(-50%, -50%)` }}
+                style={{
+                  transform: `translate(${x}px, ${y}px) translate(-50%, -50%)`,
+                }}
               >
                 <div
                   className={`${r.spinClass} animate-float`}
-                  style={{ animationDirection: "reverse", animationDelay: `${j * 0.3}s` }}
+                  style={{
+                    animationDirection: "reverse",
+                    animationDelay: `${j * 0.3}s`,
+                  }}
                 >
-                  <IconBubble icon={item.icon} color={item.color ?? "var(--color-primary)"} />
+                  <IconBubble
+                    icon={item.icon}
+                    color={item.color ?? "var(--color-primary)"}
+                  />
                 </div>
               </div>
             );

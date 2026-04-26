@@ -1,12 +1,33 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { CalendarIcon, Copy, Download, LayoutDashboard, LogIn, LogOut, MessageSquare, Mic, Network, Boxes } from "lucide-react";
+import {
+  CalendarIcon,
+  Copy,
+  Download,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  MessageSquare,
+  Mic,
+  Network,
+  Boxes,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useAuth } from "@/lib/auth";
 import { getNotesForDateRange } from "@/lib/notes";
 import { cn } from "@/lib/utils";
@@ -19,11 +40,21 @@ const navItems = [
   { to: "/graph", label: "Graph", icon: Network },
 ] as const;
 
-const fallbackTimeZones = ["UTC", "America/New_York", "Europe/London", "Europe/Paris", "Asia/Dubai", "Asia/Kolkata", "Asia/Tokyo", "Australia/Sydney"];
+const fallbackTimeZones = [
+  "UTC",
+  "America/New_York",
+  "Europe/London",
+  "Europe/Paris",
+  "Asia/Dubai",
+  "Asia/Kolkata",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+];
 
-const timeZones = typeof Intl !== "undefined" && "supportedValuesOf" in Intl
-  ? Intl.supportedValuesOf("timeZone")
-  : fallbackTimeZones;
+const timeZones =
+  typeof Intl !== "undefined" && "supportedValuesOf" in Intl
+    ? Intl.supportedValuesOf("timeZone")
+    : fallbackTimeZones;
 
 function pad(n: number): string {
   return n.toString().padStart(2, "0");
@@ -37,7 +68,17 @@ function formatDateLabel(date: Date): string {
   return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
-function zonedDateTimeParts(date: Date, timeZone: string): { year: number; month: number; day: number; hour: number; minute: number; second: number } {
+function zonedDateTimeParts(
+  date: Date,
+  timeZone: string,
+): {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
+} {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone,
     year: "numeric",
@@ -58,17 +99,44 @@ function zonedDateTimeParts(date: Date, timeZone: string): { year: number; month
   };
 }
 
-function zonedDateParts(date: Date, timeZone: string): { year: number; month: number; day: number } {
+function zonedDateParts(
+  date: Date,
+  timeZone: string,
+): { year: number; month: number; day: number } {
   const { year, month, day } = zonedDateTimeParts(date, timeZone);
   return { year, month, day };
 }
 
-function utcForZonedTime(parts: { year: number; month: number; day: number; hour: number; minute: number; second: number }, timeZone: string): Date {
-  const targetUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+function utcForZonedTime(
+  parts: {
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+    second: number;
+  },
+  timeZone: string,
+): Date {
+  const targetUtc = Date.UTC(
+    parts.year,
+    parts.month - 1,
+    parts.day,
+    parts.hour,
+    parts.minute,
+    parts.second,
+  );
   let guess = new Date(targetUtc);
   for (let i = 0; i < 5; i += 1) {
     const actual = zonedDateTimeParts(guess, timeZone);
-    const actualUtc = Date.UTC(actual.year, actual.month - 1, actual.day, actual.hour, actual.minute, actual.second);
+    const actualUtc = Date.UTC(
+      actual.year,
+      actual.month - 1,
+      actual.day,
+      actual.hour,
+      actual.minute,
+      actual.second,
+    );
     const diff = actualUtc - targetUtc;
     if (diff === 0) return guess;
     guess = new Date(guess.getTime() - diff);
@@ -76,16 +144,33 @@ function utcForZonedTime(parts: { year: number; month: number; day: number; hour
   return guess;
 }
 
-function nextDayParts(parts: { year: number; month: number; day: number }): { year: number; month: number; day: number } {
+function nextDayParts(parts: { year: number; month: number; day: number }): {
+  year: number;
+  month: number;
+  day: number;
+} {
   const next = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + 1));
-  return { year: next.getUTCFullYear(), month: next.getUTCMonth() + 1, day: next.getUTCDate() };
+  return {
+    year: next.getUTCFullYear(),
+    month: next.getUTCMonth() + 1,
+    day: next.getUTCDate(),
+  };
 }
 
-function verifiedZonedDayBounds(date: Date, timeZone: string): { start: Date; end: Date; verified: boolean } {
+function verifiedZonedDayBounds(
+  date: Date,
+  timeZone: string,
+): { start: Date; end: Date; verified: boolean } {
   const { year, month, day } = zonedDateParts(date, timeZone);
   const endParts = nextDayParts({ year, month, day });
-  const start = utcForZonedTime({ year, month, day, hour: 0, minute: 0, second: 0 }, timeZone);
-  const end = utcForZonedTime({ ...endParts, hour: 0, minute: 0, second: 0 }, timeZone);
+  const start = utcForZonedTime(
+    { year, month, day, hour: 0, minute: 0, second: 0 },
+    timeZone,
+  );
+  const end = utcForZonedTime(
+    { ...endParts, hour: 0, minute: 0, second: 0 },
+    timeZone,
+  );
   const startCheck = zonedDateTimeParts(start, timeZone);
   const endCheck = zonedDateTimeParts(end, timeZone);
   const verified =
@@ -119,7 +204,10 @@ function formatUtcBound(date: Date): string {
 }
 
 function formatCopyBounds(start: Date, end: Date, timeZone: string): string {
-  return [`Local (${timeZone}): ${formatBound(start, timeZone)} → ${formatBound(end, timeZone)}`, `UTC: ${start.toISOString()} → ${end.toISOString()}`].join("\n");
+  return [
+    `Local (${timeZone}): ${formatBound(start, timeZone)} → ${formatBound(end, timeZone)}`,
+    `UTC: ${start.toISOString()} → ${end.toISOString()}`,
+  ].join("\n");
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -131,7 +219,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [exportBounds, setExportBounds] = useState<string | null>(null);
   const [exportBoundsCopy, setExportBoundsCopy] = useState<string | null>(null);
   const [exportDate, setExportDate] = useState<Date>(new Date());
-  const [exportTimeZone, setExportTimeZone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
+  const [exportTimeZone, setExportTimeZone] = useState(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+  );
 
   const handleLogout = () => {
     logout();
@@ -146,9 +236,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     setExportProgress(15);
     try {
       setExportProgress(35);
-      const { start, end, verified } = verifiedZonedDayBounds(exportDate, exportTimeZone);
+      const { start, end, verified } = verifiedZonedDayBounds(
+        exportDate,
+        exportTimeZone,
+      );
       if (!verified) throw new Error("Timezone boundary verification failed.");
-      setExportBounds(`${formatBound(start, exportTimeZone)} → ${formatBound(end, exportTimeZone)} · UTC ${formatUtcBound(start)}–${formatUtcBound(end)}`);
+      setExportBounds(
+        `${formatBound(start, exportTimeZone)} → ${formatBound(end, exportTimeZone)} · UTC ${formatUtcBound(start)}–${formatUtcBound(end)}`,
+      );
       setExportBoundsCopy(formatCopyBounds(start, end, exportTimeZone));
       if (!user?.id) {
         toast.error("Sign in required", {
@@ -179,12 +274,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       setExportProgress(100);
-      toast.success(`Exported ${notes.length} memories for ${formatDateLabel(exportDate)}.`, {
-        description: exportTimeZone,
-      });
+      toast.success(
+        `Exported ${notes.length} memories for ${formatDateLabel(exportDate)}.`,
+        {
+          description: exportTimeZone,
+        },
+      );
     } catch (err) {
       toast.error("Export failed", {
-        description: err instanceof Error ? err.message : "Couldn't create your Daily Dump.",
+        description:
+          err instanceof Error
+            ? err.message
+            : "Couldn't create your Daily Dump.",
         duration: 8000,
         action: { label: "Retry", onClick: () => void handleExport() },
       });
@@ -205,7 +306,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       toast.success("Copied verified export bounds.");
     } catch (err) {
       toast.error("Couldn't copy bounds", {
-        description: err instanceof Error ? err.message : "Clipboard access was blocked.",
+        description:
+          err instanceof Error ? err.message : "Clipboard access was blocked.",
       });
     }
   };
@@ -215,7 +317,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <aside className="hidden w-60 shrink-0 flex-col border-r border-border/60 bg-card/30 md:flex">
         <div className="flex h-16 items-center gap-2 border-b border-border/60 px-5">
           <span className="h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_var(--ember-glow)]" />
-          <span className="text-base font-semibold tracking-tight text-foreground">MemoryMesh</span>
+          <span className="text-base font-semibold tracking-tight text-foreground">
+            MemoryMesh
+          </span>
         </div>
         <nav className="flex flex-1 flex-col gap-1 p-3">
           {navItems.map(({ to, label, icon: Icon }) => {
@@ -241,8 +345,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {user ? (
             <>
               <div className="mb-2 px-2 text-xs">
-                <div className="truncate font-medium text-foreground">{user.displayName}</div>
-                <div className="truncate text-muted-foreground">{user.email}</div>
+                <div className="truncate font-medium text-foreground">
+                  {user.displayName}
+                </div>
+                <div className="truncate text-muted-foreground">
+                  {user.email}
+                </div>
               </div>
               <Button
                 variant="ghost"
@@ -291,10 +399,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </nav>
           <div className="ml-auto flex items-center gap-2">
             {exporting && (
-              <div className="hidden w-72 items-center gap-2 sm:flex" aria-label="Export progress">
+              <div
+                className="hidden w-72 items-center gap-2 sm:flex"
+                aria-label="Export progress"
+              >
                 <div className="min-w-0 flex-1">
                   <Progress value={exportProgress} className="h-1.5" />
-                  {exportBounds && <div className="mt-1 truncate text-[11px] text-muted-foreground">{exportBounds}</div>}
+                  {exportBounds && (
+                    <div className="mt-1 truncate text-[11px] text-muted-foreground">
+                      {exportBounds}
+                    </div>
+                  )}
                 </div>
                 {exportBoundsCopy && (
                   <Button
@@ -308,7 +423,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <Copy className="h-3.5 w-3.5" />
                   </Button>
                 )}
-                <span className="text-xs tabular-nums text-muted-foreground">{exportProgress}%</span>
+                <span className="text-xs tabular-nums text-muted-foreground">
+                  {exportProgress}%
+                </span>
               </div>
             )}
             <Popover>
@@ -336,8 +453,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 />
               </PopoverContent>
             </Popover>
-            <Select value={exportTimeZone} onValueChange={setExportTimeZone} disabled={exporting}>
-              <SelectTrigger className="hidden h-8 w-44 border-border/60 bg-background/40 text-xs text-muted-foreground hover:text-foreground sm:flex" aria-label="Export timezone">
+            <Select
+              value={exportTimeZone}
+              onValueChange={setExportTimeZone}
+              disabled={exporting}
+            >
+              <SelectTrigger
+                className="hidden h-8 w-44 border-border/60 bg-background/40 text-xs text-muted-foreground hover:text-foreground sm:flex"
+                aria-label="Export timezone"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="max-h-72">

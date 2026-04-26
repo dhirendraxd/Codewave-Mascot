@@ -28,7 +28,10 @@ export interface Note {
 
 const COLLECTION = "notes";
 
-function notesQueryForUser(userId?: string, ...constraints: QueryConstraint[]): Query {
+function notesQueryForUser(
+  userId?: string,
+  ...constraints: QueryConstraint[]
+): Query {
   if (!userId) {
     throw new Error("Authentication required to access notes.");
   }
@@ -96,7 +99,9 @@ export async function getAllNotes(userId?: string): Promise<Note[]> {
   if (userId?.startsWith("guest_")) {
     // Return local notes for guest users
     const { getLocalNotesAsNotes } = await import("./local-notes");
-    return getLocalNotesAsNotes().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    return getLocalNotesAsNotes().sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
   }
 
   // Return Firebase notes for regular users
@@ -113,18 +118,25 @@ export async function getNotesLast24h(userId?: string): Promise<Note[]> {
     const allNotes = getLocalNotesAsNotes();
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
     return allNotes
-      .filter(note => note.createdAt >= since)
+      .filter((note) => note.createdAt >= since)
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
   }
 
   // Return Firebase notes for regular users
   const since = Timestamp.fromDate(new Date(Date.now() - 24 * 60 * 60 * 1000));
-  const q = notesQueryForUser(userId, where("createdAt", ">=", since), orderBy("createdAt", "asc"));
+  const q = notesQueryForUser(
+    userId,
+    where("createdAt", ">=", since),
+    orderBy("createdAt", "asc"),
+  );
   const snap = await getDocs(q);
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-export async function getNotesForDate(date: Date, userId?: string): Promise<Note[]> {
+export async function getNotesForDate(
+  date: Date,
+  userId?: string,
+): Promise<Note[]> {
   // Check if this is a guest user
   if (userId?.startsWith("guest_")) {
     // Return local notes for guest users
@@ -136,7 +148,7 @@ export async function getNotesForDate(date: Date, userId?: string): Promise<Note
     end.setDate(end.getDate() + 1);
 
     return allNotes
-      .filter(note => note.createdAt >= start && note.createdAt < end)
+      .filter((note) => note.createdAt >= start && note.createdAt < end)
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
   }
 
@@ -156,7 +168,11 @@ export async function getNotesForDate(date: Date, userId?: string): Promise<Note
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-export async function getNotesForDateRange(start: Date, end: Date, userId?: string): Promise<Note[]> {
+export async function getNotesForDateRange(
+  start: Date,
+  end: Date,
+  userId?: string,
+): Promise<Note[]> {
   const q = notesQueryForUser(
     userId,
     where("createdAt", ">=", Timestamp.fromDate(start)),

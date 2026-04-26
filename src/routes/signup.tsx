@@ -80,25 +80,40 @@ function SignupPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 flex items-center justify-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_14px_var(--ember-glow)]" />
-          <span className="text-lg font-semibold tracking-tight text-foreground">MemoryMesh</span>
+          <span className="text-lg font-semibold tracking-tight text-foreground">
+            MemoryMesh
+          </span>
         </div>
         <div className="rounded-2xl border border-border/70 bg-card/85 p-6 shadow-xl backdrop-blur sm:p-7">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Create your account</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            Create your account
+          </h1>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
             Start building your audio-first second brain.
           </p>
-          <Button type="button" variant="outline" disabled={pending} className="mt-5 w-full" onClick={handleGoogleSignup}>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={pending}
+            className="mt-5 w-full"
+            onClick={handleGoogleSignup}
+          >
             <GoogleLogo className="h-4 w-4" />
             Continue with Google
           </Button>
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-border/70" />
-            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">or</span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              or
+            </span>
             <div className="h-px flex-1 bg-border/70" />
           </div>
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div className="space-y-1.5">
-              <label htmlFor="name" className="text-xs font-medium text-muted-foreground">
+              <label
+                htmlFor="name"
+                className="text-xs font-medium text-muted-foreground"
+              >
                 Display name
               </label>
               <div className="flex items-center rounded-lg border border-border bg-background focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
@@ -115,7 +130,10 @@ function SignupPage() {
               </div>
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="email" className="text-xs font-medium text-muted-foreground">
+              <label
+                htmlFor="email"
+                className="text-xs font-medium text-muted-foreground"
+              >
                 Email
               </label>
               <div className="flex items-center rounded-lg border border-border bg-background focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
@@ -133,7 +151,10 @@ function SignupPage() {
               </div>
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="password" className="text-xs font-medium text-muted-foreground">
+              <label
+                htmlFor="password"
+                className="text-xs font-medium text-muted-foreground"
+              >
                 Password
               </label>
               <div className="flex items-center rounded-lg border border-border bg-background focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
@@ -152,7 +173,11 @@ function SignupPage() {
               </div>
             </div>
             <Button type="submit" disabled={pending} className="w-full">
-              {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create account"}
+              {pending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Create account"
+              )}
             </Button>
           </form>
           <p className="mt-6 text-center text-xs text-muted-foreground">

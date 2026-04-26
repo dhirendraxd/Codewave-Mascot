@@ -1,4 +1,14 @@
-import { Boxes, Check, Loader2, Lock, MapPin, Mic, MicOff, Sparkles, X } from "lucide-react";
+import {
+  Boxes,
+  Check,
+  Loader2,
+  Lock,
+  MapPin,
+  Mic,
+  MicOff,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -14,7 +24,9 @@ import { notifyError } from "@/lib/errors";
 export function CaptureView() {
   const speech = useSpeechRecognition();
   const [processing, setProcessing] = useState(false);
-  const [pendingTranscript, setPendingTranscript] = useState<string | null>(null);
+  const [pendingTranscript, setPendingTranscript] = useState<string | null>(
+    null,
+  );
   const [savedDetails, setSavedDetails] = useState<
     | (ProcessedNote & { bucket: string; city: string | null; savedAt: Date })
     | null
@@ -22,7 +34,9 @@ export function CaptureView() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const liveText = speech.finalTranscript + (speech.interimTranscript ? ` ${speech.interimTranscript}` : "");
+  const liveText =
+    speech.finalTranscript +
+    (speech.interimTranscript ? ` ${speech.interimTranscript}` : "");
   const hasText = liveText.trim().length > 0;
 
   const handleClick = async () => {
@@ -38,12 +52,16 @@ export function CaptureView() {
         // Save the transcript so user can log in and save it after
         setPendingTranscript(transcript);
         try {
-          window.sessionStorage.setItem("memorymesh:pending-transcript", transcript);
+          window.sessionStorage.setItem(
+            "memorymesh:pending-transcript",
+            transcript,
+          );
         } catch {
           // ignore
         }
         toast.message("Sign in to save this memory.", {
-          description: "Your transcript is ready — log in or create an account to keep it.",
+          description:
+            "Your transcript is ready — log in or create an account to keep it.",
         });
         return;
       }
@@ -74,15 +92,26 @@ export function CaptureView() {
         city: geo?.city ?? null,
       });
       toast.success(`Saved to ${processed.bucket}.`);
-      setSavedDetails({ ...processed, city: geo?.city ?? null, savedAt: new Date() });
+      setSavedDetails({
+        ...processed,
+        city: geo?.city ?? null,
+        savedAt: new Date(),
+      });
       setPendingTranscript(null);
-      try { window.sessionStorage.removeItem("memorymesh:pending-transcript"); } catch { /* ignore */ }
+      try {
+        window.sessionStorage.removeItem("memorymesh:pending-transcript");
+      } catch {
+        /* ignore */
+      }
       speech.reset();
     } catch (err) {
       // Keep transcript so retry has data; show pending UI as a fallback.
       setPendingTranscript(transcript);
       try {
-        window.sessionStorage.setItem("memorymesh:pending-transcript", transcript);
+        window.sessionStorage.setItem(
+          "memorymesh:pending-transcript",
+          transcript,
+        );
       } catch {
         // ignore
       }
@@ -99,9 +128,12 @@ export function CaptureView() {
       <div className="flex flex-1 items-center justify-center px-6">
         <div className="max-w-md rounded-xl border border-border bg-card p-6 text-center">
           <MicOff className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
-          <h2 className="text-lg font-semibold text-foreground">Voice capture unavailable</h2>
+          <h2 className="text-lg font-semibold text-foreground">
+            Voice capture unavailable
+          </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Your browser doesn't support the Web Speech API. Please use Chrome or Edge for the best experience.
+            Your browser doesn't support the Web Speech API. Please use Chrome
+            or Edge for the best experience.
           </p>
         </div>
       </div>
@@ -114,7 +146,12 @@ export function CaptureView() {
         <div className="flex w-full max-w-2xl items-center justify-between gap-4 rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
           <div className="flex items-center gap-2 text-foreground">
             <Lock className="h-4 w-4 text-primary" />
-            <span>Try capture freely. <span className="text-muted-foreground">Sign in to save memories.</span></span>
+            <span>
+              Try capture freely.{" "}
+              <span className="text-muted-foreground">
+                Sign in to save memories.
+              </span>
+            </span>
           </div>
           <Button asChild size="sm" variant="outline" className="shrink-0">
             <Link to="/login">Sign in</Link>
@@ -141,7 +178,9 @@ export function CaptureView() {
           <Mic
             className={cn(
               "!h-16 !w-16 transition-colors",
-              speech.listening ? "text-primary" : "text-foreground/80 group-hover:text-primary",
+              speech.listening
+                ? "text-primary"
+                : "text-foreground/80 group-hover:text-primary",
             )}
           />
         )}
@@ -149,16 +188,28 @@ export function CaptureView() {
 
       <div className="min-h-24 w-full max-w-2xl text-center">
         {savedDetails ? (
-          <SavedNoteDetails details={savedDetails} onDismiss={() => setSavedDetails(null)} />
+          <SavedNoteDetails
+            details={savedDetails}
+            onDismiss={() => setSavedDetails(null)}
+          />
         ) : pendingTranscript ? (
           <div className="rounded-xl border border-border bg-card/60 p-5 text-left">
             <p className="text-sm text-muted-foreground">Captured transcript</p>
-            <p className="mt-2 text-base leading-relaxed text-foreground">{pendingTranscript}</p>
+            <p className="mt-2 text-base leading-relaxed text-foreground">
+              {pendingTranscript}
+            </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Button onClick={() => navigate({ to: "/signup" })} className="rounded-full">
+              <Button
+                onClick={() => navigate({ to: "/signup" })}
+                className="rounded-full"
+              >
                 Create account to save
               </Button>
-              <Button variant="outline" onClick={() => navigate({ to: "/login" })} className="rounded-full">
+              <Button
+                variant="outline"
+                onClick={() => navigate({ to: "/login" })}
+                className="rounded-full"
+              >
                 Log in
               </Button>
               <Button
@@ -166,7 +217,13 @@ export function CaptureView() {
                 onClick={() => {
                   setPendingTranscript(null);
                   speech.reset();
-                  try { window.sessionStorage.removeItem("memorymesh:pending-transcript"); } catch { /* ignore */ }
+                  try {
+                    window.sessionStorage.removeItem(
+                      "memorymesh:pending-transcript",
+                    );
+                  } catch {
+                    /* ignore */
+                  }
                 }}
                 className="rounded-full"
               >
@@ -175,12 +232,17 @@ export function CaptureView() {
             </div>
           </div>
         ) : processing ? (
-          <p className="text-sm tracking-wide text-muted-foreground">Processing thought…</p>
+          <p className="text-sm tracking-wide text-muted-foreground">
+            Processing thought…
+          </p>
         ) : hasText ? (
           <p className="text-xl leading-relaxed text-foreground sm:text-2xl">
             <span>{speech.finalTranscript}</span>
             {speech.interimTranscript && (
-              <span className="text-muted-foreground"> {speech.interimTranscript}</span>
+              <span className="text-muted-foreground">
+                {" "}
+                {speech.interimTranscript}
+              </span>
             )}
           </p>
         ) : (
@@ -203,7 +265,10 @@ function SavedNoteDetails({
   details: ProcessedNote & { city: string | null; savedAt: Date };
   onDismiss: () => void;
 }) {
-  const time = details.savedAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const time = details.savedAt.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   return (
     <div className="animate-fade-in-up rounded-2xl border border-primary/30 bg-card/70 p-5 text-left shadow-[var(--shadow-ember)]">
       <div className="flex items-start justify-between gap-3">
@@ -212,7 +277,9 @@ function SavedNoteDetails({
             <Check className="h-4 w-4" strokeWidth={3} />
           </span>
           <div>
-            <p className="text-sm font-semibold text-foreground">Memory Saved</p>
+            <p className="text-sm font-semibold text-foreground">
+              Memory Saved
+            </p>
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
               {time} · processed by Gemini
             </p>
@@ -230,8 +297,12 @@ function SavedNoteDetails({
 
       {/* Cleaned text */}
       <div className="mt-4 rounded-xl border border-border bg-background/60 p-3">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Cleaned text</p>
-        <p className="mt-1.5 text-sm leading-relaxed text-foreground">{details.cleanedText}</p>
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          Cleaned text
+        </p>
+        <p className="mt-1.5 text-sm leading-relaxed text-foreground">
+          {details.cleanedText}
+        </p>
       </div>
 
       {/* Meta row: bucket + place */}

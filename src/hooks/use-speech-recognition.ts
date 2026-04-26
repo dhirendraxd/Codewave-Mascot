@@ -6,7 +6,14 @@ type SpeechRecognitionLike = {
   lang: string;
   start: () => void;
   stop: () => void;
-  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }>; resultIndex: number }) => void) | null;
+  onresult:
+    | ((event: {
+        results: ArrayLike<
+          ArrayLike<{ transcript: string }> & { isFinal: boolean }
+        >;
+        resultIndex: number;
+      }) => void)
+    | null;
   onend: (() => void) | null;
   onerror: ((event: { error: string }) => void) | null;
 };
@@ -58,7 +65,10 @@ export function useSpeechRecognition(): UseSpeechRecognition {
         if (result.isFinal) finalAdd += text;
         else interim += text;
       }
-      if (finalAdd) setFinalTranscript((prev) => (prev ? prev + " " : "") + finalAdd.trim());
+      if (finalAdd)
+        setFinalTranscript(
+          (prev) => (prev ? prev + " " : "") + finalAdd.trim(),
+        );
       setInterimTranscript(interim);
     };
     rec.onend = () => {
@@ -71,7 +81,11 @@ export function useSpeechRecognition(): UseSpeechRecognition {
     };
     recognitionRef.current = rec;
     return () => {
-      try { rec.stop(); } catch { /* noop */ }
+      try {
+        rec.stop();
+      } catch {
+        /* noop */
+      }
     };
   }, []);
 
@@ -92,7 +106,11 @@ export function useSpeechRecognition(): UseSpeechRecognition {
   const stop = useCallback(() => {
     const rec = recognitionRef.current;
     if (!rec) return;
-    try { rec.stop(); } catch { /* noop */ }
+    try {
+      rec.stop();
+    } catch {
+      /* noop */
+    }
     setListening(false);
   }, []);
 
@@ -102,5 +120,14 @@ export function useSpeechRecognition(): UseSpeechRecognition {
     setError(null);
   }, []);
 
-  return { supported, listening, finalTranscript, interimTranscript, start, stop, reset, error };
+  return {
+    supported,
+    listening,
+    finalTranscript,
+    interimTranscript,
+    start,
+    stop,
+    reset,
+    error,
+  };
 }

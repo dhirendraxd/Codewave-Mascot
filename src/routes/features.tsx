@@ -1,28 +1,77 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mic, Brain, Boxes, Network, MapPin, MessageSquare, Sparkles, Download } from "lucide-react";
+import {
+  Mic,
+  Brain,
+  Boxes,
+  Network,
+  MapPin,
+  MessageSquare,
+  Sparkles,
+  Download,
+} from "lucide-react";
 import { MarketingShell } from "@/components/marketing/MarketingShell";
 
 export const Route = createFileRoute("/features")({
   head: () => ({
     meta: [
       { title: "Features — MemoryMesh" },
-      { name: "description", content: "Voice capture, AI buckets, semantic search, connection graph, and daily exports for your second brain." },
+      {
+        name: "description",
+        content:
+          "Voice capture, AI buckets, semantic search, connection graph, and daily exports for your second brain.",
+      },
       { property: "og:title", content: "Features — MemoryMesh" },
-      { property: "og:description", content: "Voice capture, AI buckets, semantic search, connection graph, and daily exports for your second brain." },
+      {
+        property: "og:description",
+        content:
+          "Voice capture, AI buckets, semantic search, connection graph, and daily exports for your second brain.",
+      },
     ],
   }),
   component: FeaturesPage,
 });
 
 const features = [
-  { icon: Mic, title: "One-tap voice capture", desc: "Speak freely. The Web Speech API streams your transcript in real time — no upload, no friction." },
-  { icon: Brain, title: "AI cleanup", desc: "Gemini polishes raw transcripts, extracts keywords, and infers a topical bucket without losing your voice." },
-  { icon: Boxes, title: "Dynamic buckets", desc: "Topics emerge naturally — Business, Travel, Ideas — and reorganize as your thinking evolves." },
-  { icon: Network, title: "Connection graph", desc: "Memories link across time, place, keywords, and bucket. See your mind think." },
-  { icon: MessageSquare, title: "Conversational recall", desc: "Ask in plain English. The chat surfaces relevant memories with citations and context." },
-  { icon: MapPin, title: "Location-aware", desc: "Optional geolocation tags every note with city — recall by where you were, not just when." },
-  { icon: Sparkles, title: "Keyword cloud", desc: "See what your week was about. Themes weighted by frequency, not vanity metrics." },
-  { icon: Download, title: "Daily dump export", desc: "One-click Markdown export of the last 24 hours. Your data, always portable." },
+  {
+    icon: Mic,
+    title: "One-tap voice capture",
+    desc: "Speak freely. The Web Speech API streams your transcript in real time — no upload, no friction.",
+  },
+  {
+    icon: Brain,
+    title: "AI cleanup",
+    desc: "Gemini polishes raw transcripts, extracts keywords, and infers a topical bucket without losing your voice.",
+  },
+  {
+    icon: Boxes,
+    title: "Dynamic buckets",
+    desc: "Topics emerge naturally — Business, Travel, Ideas — and reorganize as your thinking evolves.",
+  },
+  {
+    icon: Network,
+    title: "Connection graph",
+    desc: "Memories link across time, place, keywords, and bucket. See your mind think.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Conversational recall",
+    desc: "Ask in plain English. The chat surfaces relevant memories with citations and context.",
+  },
+  {
+    icon: MapPin,
+    title: "Location-aware",
+    desc: "Optional geolocation tags every note with city — recall by where you were, not just when.",
+  },
+  {
+    icon: Sparkles,
+    title: "Keyword cloud",
+    desc: "See what your week was about. Themes weighted by frequency, not vanity metrics.",
+  },
+  {
+    icon: Download,
+    title: "Daily dump export",
+    desc: "One-click Markdown export of the last 24 hours. Your data, always portable.",
+  },
 ];
 
 function FeaturesPage() {
@@ -34,7 +83,8 @@ function FeaturesPage() {
             <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Features
           </span>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-            Core features for <span className="text-primary">clear thinking</span>
+            Core features for{" "}
+            <span className="text-primary">clear thinking</span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
             Capture, connect, and recall thoughts without extra setup.
@@ -45,12 +95,19 @@ function FeaturesPage() {
       <section className="mx-auto w-full px-4 py-16 sm:px-6 lg:px-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {features.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="group rounded-2xl border border-border/50 bg-card/40 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card/70">
+            <div
+              key={title}
+              className="group rounded-2xl border border-border/50 bg-card/40 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card/70"
+            >
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-border">
                 <Icon className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="mt-4 text-base font-semibold text-foreground">{title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{desc}</p>
+              <h3 className="mt-4 text-base font-semibold text-foreground">
+                {title}
+              </h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                {desc}
+              </p>
             </div>
           ))}
         </div>

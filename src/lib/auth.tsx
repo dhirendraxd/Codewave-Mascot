@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   createUserWithEmailAndPassword,
   getRedirectResult,
@@ -25,7 +33,11 @@ interface AuthContextValue {
   user: AuthUser | null;
   ready: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, displayName: string) => Promise<void>;
+  signup: (
+    email: string,
+    password: string,
+    displayName: string,
+  ) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   loginAsGuest: () => Promise<void>;
   logout: () => void;
@@ -114,7 +126,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               // Trigger data sync
               void (async () => {
                 try {
-                  const { syncGuestDataToFirebase } = await import("./local-notes");
+                  const { syncGuestDataToFirebase } =
+                    await import("./local-notes");
                   await syncGuestDataToFirebase(guestUser.id, mappedUser.id);
                   // Show success message
                   console.log("Guest data synced successfully!");
@@ -155,10 +168,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [auth]);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
-    setUser(mapFirebaseUser(credential.user));
-  }, [auth]);
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const credential = await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password,
+      );
+      setUser(mapFirebaseUser(credential.user));
+    },
+    [auth],
+  );
 
   const loginAsGuest = useCallback(async () => {
     // Create a local guest user without Firebase
@@ -175,19 +195,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("memorymesh_guest_user", JSON.stringify(guestUser));
   }, []);
 
-  const signup = useCallback(async (email: string, password: string, displayName: string) => {
-    const credential = await createUserWithEmailAndPassword(auth, email.trim(), password);
-    const cleanName = displayName.trim();
-    if (cleanName) {
-      await updateProfile(credential.user, { displayName: cleanName });
-    }
-    setUser(
-      mapFirebaseUser({
-        ...credential.user,
-        displayName: cleanName || credential.user.displayName,
-      }),
-    );
-  }, [auth]);
+  const signup = useCallback(
+    async (email: string, password: string, displayName: string) => {
+      const credential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password,
+      );
+      const cleanName = displayName.trim();
+      if (cleanName) {
+        await updateProfile(credential.user, { displayName: cleanName });
+      }
+      setUser(
+        mapFirebaseUser({
+          ...credential.user,
+          displayName: cleanName || credential.user.displayName,
+        }),
+      );
+    },
+    [auth],
+  );
 
   const loginWithGoogle = useCallback(async () => {
     try {
@@ -220,7 +247,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [auth, user?.isGuest]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, ready, login, signup, loginWithGoogle, loginAsGuest, logout }),
+    () => ({
+      user,
+      ready,
+      login,
+      signup,
+      loginWithGoogle,
+      loginAsGuest,
+      logout,
+    }),
     [user, ready, login, signup, loginWithGoogle, loginAsGuest, logout],
   );
 
