@@ -8,9 +8,9 @@ export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — MemoryMesh" },
-      { name: "description", content: "Simple plans for personal recall and team-wide memory. Start free, upgrade when you outgrow it." },
+      { name: "description", content: "Simple plans for personal recall and small teams. Start free, upgrade when you need more." },
       { property: "og:title", content: "Pricing — MemoryMesh" },
-      { property: "og:description", content: "Simple plans for personal recall and team-wide memory. Start free, upgrade when you outgrow it." },
+      { property: "og:description", content: "Simple plans for personal recall and small teams. Start free, upgrade when you need more." },
     ],
   }),
   component: PricingPage,
@@ -23,7 +23,7 @@ const plans = [
     cadence: "forever",
     desc: "For curious thinkers getting started.",
     cta: "Get started",
-    features: ["100 voice memories / mo", "AI cleanup & buckets", "Connection graph", "Daily Markdown export"],
+    features: ["100 voice memories / mo", "AI cleanup", "Basic recall", "Markdown export"],
     highlight: false,
   },
   {
@@ -32,7 +32,7 @@ const plans = [
     cadence: "/ month",
     desc: "For knowledge workers and creators.",
     cta: "Go Pro",
-    features: ["Unlimited memories", "Long-form transcripts", "Priority AI processing", "Place + time recall", "Email support"],
+    features: ["Unlimited memories", "Auto buckets", "Connection graph", "Place + time recall", "Priority AI"],
     highlight: true,
   },
   {
@@ -41,7 +41,7 @@ const plans = [
     cadence: "/ seat / mo",
     desc: "Shared memory for small teams.",
     cta: "Talk to us",
-    features: ["Everything in Pro", "Shared buckets", "Team graph view", "Admin controls", "SSO (coming soon)"],
+    features: ["Everything in Pro", "Shared buckets", "Team graph", "Admin controls", "SSO soon"],
     highlight: false,
   },
 ];
@@ -51,7 +51,7 @@ function PricingPage() {
     <MarketingShell>
       <section className="bg-aurora">
         <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
+          <span className="inline-flex items-center gap-2 border border-border bg-card/50 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Pricing
           </span>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
@@ -69,14 +69,14 @@ function PricingPage() {
             <div
               key={p.name}
               className={cn(
-                "relative rounded-3xl border p-8 transition-all",
+                "relative border p-8 transition-all",
                 p.highlight
                   ? "border-primary/50 bg-primary/10 shadow-[var(--shadow-ember)]"
                   : "border-border/50 bg-card/40 hover:border-border",
               )}
             >
               {p.highlight && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-primary-foreground">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 border border-primary bg-primary px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-primary-foreground">
                   Most popular
                 </span>
               )}
@@ -89,7 +89,7 @@ function PricingPage() {
               <Button
                 asChild
                 className={cn(
-                  "mt-6 w-full rounded-full",
+                  "mt-6 w-full rounded-none",
                   p.highlight
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
                     : "bg-card text-foreground hover:bg-card/80",

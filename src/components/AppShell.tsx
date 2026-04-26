@@ -13,8 +13,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/capture", label: "Capture", icon: Mic },
-  { to: "/chat", label: "Chat", icon: MessageSquare },
+  { to: "/capture", label: "Mesh", icon: Mic },
   { to: "/buckets", label: "Buckets", icon: Boxes },
   { to: "/graph", label: "Graph", icon: Network },
 ] as const;

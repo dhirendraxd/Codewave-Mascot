@@ -1,16 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AppShell } from "@/components/AppShell";
-import { MeshView } from "@/components/MeshView";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/chat")({
-  head: () => ({ meta: [{ title: "Mesh — MemoryMesh" }] }),
-  component: ChatPage,
+  beforeLoad: () => {
+    throw redirect({
+      to: "/capture",
+      search: {},
+    });
+  },
 });
-
-function ChatPage() {
-  return (
-    <AppShell>
-      <MeshView />
-    </AppShell>
-  );
-}

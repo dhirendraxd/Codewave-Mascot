@@ -61,7 +61,7 @@ function relativeTime(d: Date): string {
 function DashboardContent() {
   const { user } = useAuth();
   const [notes, setNotes] = useState<Note[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to show content immediately
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [dashboardStats, setDashboardStats] = useState({
@@ -69,22 +69,6 @@ function DashboardContent() {
     insightsGenerated: 0,
     processing: false
   });
-
-  // Fake dashboard activity
-  useEffect(() => {
-    if (notes.length > 0) {
-      setDashboardStats(prev => ({ ...prev, processing: true }));
-      const timer = setTimeout(() => {
-        setDashboardStats(prev => ({
-          ...prev,
-          processing: false,
-          lastSync: new Date(),
-          insightsGenerated: Math.floor(Math.random() * 5) + 3
-        }));
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [notes.length]);
 
   // Static demo notes for when there are no real notes
   const getDemoNotes = (): Note[] => [
@@ -285,10 +269,13 @@ function DashboardContent() {
     },
   ];
 
+  // Show demo data immediately, then try to load real data in background
   useEffect(() => {
+    // Set demo notes immediately for instant loading
+    setNotes(getDemoNotes());
+
+    // Then try to load real notes in background
     let cancelled = false;
-    setLoading(true);
-    setError(null);
     (async () => {
       try {
         const all = await getAllNotes();
@@ -296,20 +283,15 @@ function DashboardContent() {
 
         if (cancelled) return;
 
-        // If no real notes, show demo notes
-        if (mine.length === 0) {
-          setNotes(getDemoNotes());
-        } else {
+        // Only update if we have real notes
+        if (mine.length > 0) {
           setNotes(mine);
         }
+        // If no real notes, keep demo notes (already set)
       } catch (err) {
         if (cancelled) return;
-        // On error, show demo notes instead of failing
-        setNotes(getDemoNotes());
-        setError(err instanceof Error ? err.message : "Failed to load notes");
-        notifyError("firestore-read", err, () => setReloadKey((k) => k + 1));
-      } finally {
-        if (!cancelled) setLoading(false);
+        // Keep demo notes on error - don't show error state
+        console.log("Failed to load real notes, keeping demo data:", err);
       }
     })();
     return () => {
@@ -401,14 +383,6 @@ function DashboardContent() {
 
   const maxKeyword = topKeywords[0]?.[1] ?? 1;
   const bucketGroups = useMemo(() => groupByBucket(notes).slice(0, 6), [notes]);
-
-  if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
