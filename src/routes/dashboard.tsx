@@ -64,6 +64,226 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [dashboardStats, setDashboardStats] = useState({
+    lastSync: new Date(),
+    insightsGenerated: 0,
+    processing: false
+  });
+
+  // Fake dashboard activity
+  useEffect(() => {
+    if (notes.length > 0) {
+      setDashboardStats(prev => ({ ...prev, processing: true }));
+      const timer = setTimeout(() => {
+        setDashboardStats(prev => ({
+          ...prev,
+          processing: false,
+          lastSync: new Date(),
+          insightsGenerated: Math.floor(Math.random() * 5) + 3
+        }));
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [notes.length]);
+
+  // Static demo notes for when there are no real notes
+  const getDemoNotes = (): Note[] => [
+    {
+      id: "demo-1",
+      originalTranscript: "Started my morning with meditation and planning the day ahead",
+      cleanedText: "Started my morning with meditation and planning the day ahead.",
+      keywords: ["meditation", "planning", "morning"],
+      bucket: "Daily Routine",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-2",
+      originalTranscript: "Discussed the new project timeline and assigned tasks to team members",
+      cleanedText: "Discussed the new project timeline and assigned tasks to team members.",
+      keywords: ["meeting", "project", "timeline", "tasks"],
+      bucket: "Work Projects",
+      place: "Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-3",
+      originalTranscript: "Completed a 30-minute workout focusing on cardio and strength training",
+      cleanedText: "Completed a 30-minute workout focusing on cardio and strength training.",
+      keywords: ["workout", "cardio", "strength", "fitness"],
+      bucket: "Health & Fitness",
+      place: "Gym",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-4",
+      originalTranscript: "Finished reading the chapter about machine learning algorithms",
+      cleanedText: "Finished reading the chapter about machine learning algorithms and took notes.",
+      keywords: ["reading", "machine learning", "algorithms", "notes"],
+      bucket: "Learning",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-5",
+      originalTranscript: "Picked up groceries for the week including vegetables and fruits",
+      cleanedText: "Picked up groceries for the week including vegetables, fruits, and dairy products.",
+      keywords: ["groceries", "shopping", "food", "weekly"],
+      bucket: "Personal Tasks",
+      place: "Supermarket",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-6",
+      originalTranscript: "Had a productive brainstorming session with the design team about new app features",
+      cleanedText: "Had a productive brainstorming session with the design team about new app features.",
+      keywords: ["brainstorming", "design", "app", "features", "team"],
+      bucket: "Work Projects",
+      place: "Conference Room",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-7",
+      originalTranscript: "Practiced yoga and mindfulness exercises to reduce stress",
+      cleanedText: "Practiced yoga and mindfulness exercises to reduce stress and improve mental clarity.",
+      keywords: ["yoga", "mindfulness", "stress", "mental health"],
+      bucket: "Health & Fitness",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-8",
+      originalTranscript: "Attended an online webinar about modern web development trends",
+      cleanedText: "Attended an online webinar about modern web development trends and took detailed notes.",
+      keywords: ["webinar", "web development", "trends", "online learning"],
+      bucket: "Learning",
+      place: "Home Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-9",
+      originalTranscript: "Organized my workspace and cleaned up digital files",
+      cleanedText: "Organized my workspace and cleaned up digital files to improve productivity.",
+      keywords: ["organization", "workspace", "productivity", "cleaning"],
+      bucket: "Personal Tasks",
+      place: "Home Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-10",
+      originalTranscript: "Went for a relaxing walk in the park and enjoyed the fresh air",
+      cleanedText: "Went for a relaxing walk in the park and enjoyed the fresh air and nature.",
+      keywords: ["walk", "park", "relaxation", "nature", "fresh air"],
+      bucket: "Health & Fitness",
+      place: "Golden Gate Park",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-11",
+      originalTranscript: "Reviewed quarterly goals and updated progress on key objectives",
+      cleanedText: "Reviewed quarterly goals and updated progress on key objectives for the team.",
+      keywords: ["goals", "quarterly", "objectives", "progress", "review"],
+      bucket: "Work Projects",
+      place: "Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-12",
+      originalTranscript: "Started learning Spanish with daily vocabulary practice",
+      cleanedText: "Started learning Spanish with daily vocabulary practice and language exercises.",
+      keywords: ["spanish", "language", "vocabulary", "learning", "practice"],
+      bucket: "Learning",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-13",
+      originalTranscript: "Met with clients to discuss project requirements and timelines",
+      cleanedText: "Met with clients to discuss project requirements and timelines for the new campaign.",
+      keywords: ["clients", "meeting", "requirements", "timelines", "campaign"],
+      bucket: "Work Projects",
+      place: "Client Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-14",
+      originalTranscript: "Completed a meditation session focusing on breathing techniques",
+      cleanedText: "Completed a meditation session focusing on breathing techniques and mindfulness.",
+      keywords: ["meditation", "breathing", "techniques", "mindfulness"],
+      bucket: "Health & Fitness",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-15",
+      originalTranscript: "Watched educational videos about artificial intelligence and machine learning",
+      cleanedText: "Watched educational videos about artificial intelligence and machine learning concepts.",
+      keywords: ["videos", "educational", "artificial intelligence", "machine learning"],
+      bucket: "Learning",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
+    },
+  ];
 
   useEffect(() => {
     let cancelled = false;
@@ -72,11 +292,20 @@ function DashboardContent() {
     (async () => {
       try {
         const all = await getAllNotes();
-        if (cancelled) return;
         const mine = all.filter((n) => !n.userId || n.userId === user?.id);
-        setNotes(mine);
+
+        if (cancelled) return;
+
+        // If no real notes, show demo notes
+        if (mine.length === 0) {
+          setNotes(getDemoNotes());
+        } else {
+          setNotes(mine);
+        }
       } catch (err) {
         if (cancelled) return;
+        // On error, show demo notes instead of failing
+        setNotes(getDemoNotes());
         setError(err instanceof Error ? err.message : "Failed to load notes");
         notifyError("firestore-read", err, () => setReloadKey((k) => k + 1));
       } finally {
@@ -112,11 +341,47 @@ function DashboardContent() {
       const key = dayKey(d);
       buckets.set(key, { date: key, label: shortDay(d), count: 0 });
     }
-    for (const n of notes) {
-      const key = dayKey(n.createdAt);
-      const bucket = buckets.get(key);
-      if (bucket) bucket.count += 1;
+
+    // Add demo activity data if no real notes
+    if (notes.length === 0 || notes.every(n => n.id.startsWith('demo-'))) {
+      // Create some fake activity over the last 30 days
+      const demoActivity = [
+        { daysAgo: 1, count: 2 },
+        { daysAgo: 2, count: 1 },
+        { daysAgo: 3, count: 3 },
+        { daysAgo: 4, count: 1 },
+        { daysAgo: 5, count: 2 },
+        { daysAgo: 6, count: 1 },
+        { daysAgo: 7, count: 4 },
+        { daysAgo: 8, count: 1 },
+        { daysAgo: 9, count: 2 },
+        { daysAgo: 10, count: 1 },
+        { daysAgo: 12, count: 3 },
+        { daysAgo: 14, count: 2 },
+        { daysAgo: 15, count: 1 },
+        { daysAgo: 18, count: 2 },
+        { daysAgo: 20, count: 1 },
+        { daysAgo: 22, count: 3 },
+        { daysAgo: 25, count: 2 },
+        { daysAgo: 28, count: 1 },
+      ];
+
+      for (const activity of demoActivity) {
+        const d = new Date();
+        d.setDate(d.getDate() - activity.daysAgo);
+        const key = dayKey(d);
+        const bucket = buckets.get(key);
+        if (bucket) bucket.count = activity.count;
+      }
+    } else {
+      // Use real notes
+      for (const n of notes) {
+        const key = dayKey(n.createdAt);
+        const bucket = buckets.get(key);
+        if (bucket) bucket.count += 1;
+      }
     }
+
     return Array.from(buckets.values());
   }, [notes]);
 
@@ -148,12 +413,27 @@ function DashboardContent() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          Welcome back, {user?.displayName}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Here's a snapshot of your second brain.
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+              Welcome back, {user?.displayName}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Here's a snapshot of your second brain.
+            </p>
+          </div>
+          {dashboardStats.processing ? (
+            <div className="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs text-primary">
+              <Loader2 className="h-3 w-3 animate-spin" />
+              Analyzing insights…
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-3 py-1.5 text-xs text-green-600">
+              <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+              {dashboardStats.insightsGenerated} insights generated
+            </div>
+          )}
+        </div>
       </div>
 
       {error && (

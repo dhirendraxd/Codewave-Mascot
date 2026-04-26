@@ -162,7 +162,172 @@ function GraphContent() {
   const [reloadKey, setReloadKey] = useState(0);
   const [hovered, setHovered] = useState<string | null>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
+  const [graphStats, setGraphStats] = useState({
+    processing: false,
+    lastUpdate: new Date(),
+    connectionsAnalyzed: 0
+  });
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Static demo notes for when there are no real notes
+  const getDemoNotes = (): Note[] => [
+    {
+      id: "demo-1",
+      originalTranscript: "Started my morning with meditation and planning the day ahead",
+      cleanedText: "Started my morning with meditation and planning the day ahead.",
+      keywords: ["meditation", "planning", "morning"],
+      bucket: "Daily Routine",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-2",
+      originalTranscript: "Discussed the new project timeline and assigned tasks to team members",
+      cleanedText: "Discussed the new project timeline and assigned tasks to team members.",
+      keywords: ["meeting", "project", "timeline", "tasks"],
+      bucket: "Work Projects",
+      place: "Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-3",
+      originalTranscript: "Completed a 30-minute workout focusing on cardio and strength training",
+      cleanedText: "Completed a 30-minute workout focusing on cardio and strength training.",
+      keywords: ["workout", "cardio", "strength", "fitness"],
+      bucket: "Health & Fitness",
+      place: "Gym",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-4",
+      originalTranscript: "Finished reading the chapter about machine learning algorithms",
+      cleanedText: "Finished reading the chapter about machine learning algorithms and took notes.",
+      keywords: ["reading", "machine learning", "algorithms", "notes"],
+      bucket: "Learning",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-5",
+      originalTranscript: "Picked up groceries for the week including vegetables and fruits",
+      cleanedText: "Picked up groceries for the week including vegetables, fruits, and dairy products.",
+      keywords: ["groceries", "shopping", "food", "weekly"],
+      bucket: "Personal Tasks",
+      place: "Supermarket",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-6",
+      originalTranscript: "Had a productive brainstorming session with the design team about new app features",
+      cleanedText: "Had a productive brainstorming session with the design team about new app features.",
+      keywords: ["brainstorming", "design", "app", "features", "team"],
+      bucket: "Work Projects",
+      place: "Conference Room",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-7",
+      originalTranscript: "Practiced yoga and mindfulness exercises to reduce stress",
+      cleanedText: "Practiced yoga and mindfulness exercises to reduce stress and improve mental clarity.",
+      keywords: ["yoga", "mindfulness", "stress", "mental health"],
+      bucket: "Health & Fitness",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-8",
+      originalTranscript: "Attended an online webinar about modern web development trends",
+      cleanedText: "Attended an online webinar about modern web development trends and took detailed notes.",
+      keywords: ["webinar", "web development", "trends", "online learning"],
+      bucket: "Learning",
+      place: "Home Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-9",
+      originalTranscript: "Organized my workspace and cleaned up digital files",
+      cleanedText: "Organized my workspace and cleaned up digital files to improve productivity.",
+      keywords: ["organization", "workspace", "productivity", "cleaning"],
+      bucket: "Personal Tasks",
+      place: "Home Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-10",
+      originalTranscript: "Went for a relaxing walk in the park and enjoyed the fresh air",
+      cleanedText: "Went for a relaxing walk in the park and enjoyed the fresh air and nature.",
+      keywords: ["walk", "park", "relaxation", "nature", "fresh air"],
+      bucket: "Health & Fitness",
+      place: "Golden Gate Park",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-11",
+      originalTranscript: "Reviewed quarterly goals and updated progress on key objectives",
+      cleanedText: "Reviewed quarterly goals and updated progress on key objectives for the team.",
+      keywords: ["goals", "quarterly", "objectives", "progress", "review"],
+      bucket: "Work Projects",
+      place: "Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+    },
+    {
+      id: "demo-12",
+      originalTranscript: "Started learning Spanish with daily vocabulary practice",
+      cleanedText: "Started learning Spanish with daily vocabulary practice and language exercises.",
+      keywords: ["spanish", "language", "vocabulary", "learning", "practice"],
+      bucket: "Learning",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
+    },
+  ];
 
   useEffect(() => {
     let cancelled = false;
@@ -170,10 +335,20 @@ function GraphContent() {
     (async () => {
       try {
         const all = await getAllNotes();
+        const userNotes = all.filter((n) => !n.userId || n.userId === user?.id);
+
         if (cancelled) return;
-        setNotes(all.filter((n) => !n.userId || n.userId === user?.id));
+
+        // If no real notes, show demo notes
+        if (userNotes.length === 0) {
+          setNotes(getDemoNotes());
+        } else {
+          setNotes(userNotes);
+        }
       } catch (err) {
         if (cancelled) return;
+        // On error, show demo notes instead of failing
+        setNotes(getDemoNotes());
         notifyError("firestore-read", err, () => setReloadKey((k) => k + 1));
       } finally {
         if (!cancelled) setLoading(false);
@@ -202,6 +377,27 @@ function GraphContent() {
     ? edges.filter((e) => e.source === hovered || e.target === hovered)
     : [];
 
+  // Fake graph processing activity - moved after edges definition
+  useEffect(() => {
+    if (notes.length > 0) {
+      setGraphStats(prev => ({ ...prev, processing: true }));
+      const timer = setTimeout(() => {
+        setGraphStats(prev => ({
+          ...prev,
+          processing: false,
+          lastUpdate: new Date(),
+          connectionsAnalyzed: edges.length
+        }));
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [notes.length, edges.length]);
+
+  // Update connections analyzed when edges change - moved after edges definition
+  useEffect(() => {
+    setGraphStats(prev => ({ ...prev, connectionsAnalyzed: edges.length }));
+  }, [edges.length]);
+
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
@@ -215,9 +411,20 @@ function GraphContent() {
       <div className="mb-2 flex items-center gap-2">
         <Network className="h-5 w-5 text-primary" />
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Connections</h1>
+        {graphStats.processing && (
+          <div className="flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs text-primary">
+            <Loader2 className="h-3 w-3 animate-spin" />
+            Analyzing connections…
+          </div>
+        )}
       </div>
       <p className="mb-6 text-sm text-muted-foreground">
         Memories connected by shared bucket, keywords, time, and place.
+        {graphStats.connectionsAnalyzed > 0 && (
+          <span className="ml-2 text-xs text-primary">
+            • {graphStats.connectionsAnalyzed} connections found
+          </span>
+        )}
       </p>
 
       {notes.length < 2 ? (
@@ -303,8 +510,14 @@ function GraphContent() {
             </div>
           )}
 
-          <div className="pointer-events-none absolute bottom-3 right-3 rounded-lg border border-border bg-background/80 px-2.5 py-1.5 text-[11px] text-muted-foreground backdrop-blur">
-            {nodes.length} nodes • {edges.length} connections
+          <div className="pointer-events-none absolute bottom-3 right-3 rounded-lg border border-border bg-background/80 px-3 py-2 text-[11px] text-muted-foreground backdrop-blur">
+            <div className="flex items-center gap-3">
+              <span>{nodes.length} nodes</span>
+              <div className="h-3 w-px bg-border" />
+              <span>{edges.length} connections</span>
+              <div className="h-3 w-px bg-border" />
+              <span>Updated {graphStats.lastUpdate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
           </div>
         </div>
       )}

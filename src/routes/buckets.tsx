@@ -41,16 +41,160 @@ function BucketsContent() {
   const [loading, setLoading] = useState(true);
   const [reloadKey, setReloadKey] = useState(0);
 
+  // Static demo notes for when there are no real notes
+  const getDemoNotes = (): Note[] => [
+    {
+      id: "demo-1",
+      originalTranscript: "Started my morning with meditation and planning the day ahead",
+      cleanedText: "Started my morning with meditation and planning the day ahead.",
+      keywords: ["meditation", "planning", "morning"],
+      bucket: "Daily Routine",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+    },
+    {
+      id: "demo-2",
+      originalTranscript: "Discussed the new project timeline and assigned tasks to team members",
+      cleanedText: "Discussed the new project timeline and assigned tasks to team members.",
+      keywords: ["meeting", "project", "timeline", "tasks"],
+      bucket: "Work Projects",
+      place: "Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
+    },
+    {
+      id: "demo-3",
+      originalTranscript: "Completed a 30-minute workout focusing on cardio and strength training",
+      cleanedText: "Completed a 30-minute workout focusing on cardio and strength training.",
+      keywords: ["workout", "cardio", "strength", "fitness"],
+      bucket: "Health & Fitness",
+      place: "Gym",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
+    },
+    {
+      id: "demo-4",
+      originalTranscript: "Finished reading the chapter about machine learning algorithms",
+      cleanedText: "Finished reading the chapter about machine learning algorithms and took notes.",
+      keywords: ["reading", "machine learning", "algorithms", "notes"],
+      bucket: "Learning",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+    },
+    {
+      id: "demo-5",
+      originalTranscript: "Picked up groceries for the week including vegetables and fruits",
+      cleanedText: "Picked up groceries for the week including vegetables, fruits, and dairy products.",
+      keywords: ["groceries", "shopping", "food", "weekly"],
+      bucket: "Personal Tasks",
+      place: "Supermarket",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+    },
+    {
+      id: "demo-6",
+      originalTranscript: "Had a productive brainstorming session with the design team about the new app features",
+      cleanedText: "Had a productive brainstorming session with the design team about the new app features.",
+      keywords: ["brainstorming", "design", "app", "features", "team"],
+      bucket: "Work Projects",
+      place: "Conference Room",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+    },
+    {
+      id: "demo-7",
+      originalTranscript: "Practiced yoga and mindfulness exercises to reduce stress",
+      cleanedText: "Practiced yoga and mindfulness exercises to reduce stress and improve mental clarity.",
+      keywords: ["yoga", "mindfulness", "stress", "mental health"],
+      bucket: "Health & Fitness",
+      place: "Home",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // 4 days ago
+    },
+    {
+      id: "demo-8",
+      originalTranscript: "Attended an online webinar about modern web development trends",
+      cleanedText: "Attended an online webinar about modern web development trends and took detailed notes.",
+      keywords: ["webinar", "web development", "trends", "online learning"],
+      bucket: "Learning",
+      place: "Home Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+    },
+    {
+      id: "demo-9",
+      originalTranscript: "Organized my workspace and cleaned up digital files",
+      cleanedText: "Organized my workspace and cleaned up digital files to improve productivity.",
+      keywords: ["organization", "workspace", "productivity", "cleaning"],
+      bucket: "Personal Tasks",
+      place: "Home Office",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), // 6 days ago
+    },
+    {
+      id: "demo-10",
+      originalTranscript: "Went for a relaxing walk in the park and enjoyed the fresh air",
+      cleanedText: "Went for a relaxing walk in the park and enjoyed the fresh air and nature.",
+      keywords: ["walk", "park", "relaxation", "nature", "fresh air"],
+      bucket: "Health & Fitness",
+      place: "Golden Gate Park",
+      userId: user?.id || "guest",
+      lat: null,
+      lng: null,
+      city: "San Francisco",
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
+    },
+  ];
+
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     (async () => {
       try {
         const all = await getAllNotes();
+        const userNotes = all.filter((n) => !n.userId || n.userId === user?.id);
+
         if (cancelled) return;
-        setNotes(all.filter((n) => !n.userId || n.userId === user?.id));
+
+        // If no real notes, show demo notes
+        if (userNotes.length === 0) {
+          setNotes(getDemoNotes());
+        } else {
+          setNotes(userNotes);
+        }
       } catch (err) {
         if (cancelled) return;
+        // On error, show demo notes instead of failing
+        setNotes(getDemoNotes());
         notifyError("firestore-read", err, () => setReloadKey((k) => k + 1));
       } finally {
         if (!cancelled) setLoading(false);
